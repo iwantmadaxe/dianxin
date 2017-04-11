@@ -1,28 +1,24 @@
 <template>
-	<div class="forget input-field-con">
-		<div class="heading">
-			<img src="../../assets/images/logo/logo.png" alt="logo" class="heading-img">
-		</div>
+	<div class="forget input-field-con cl-fx">
 		<div class="content">
-			<mt-field placeholder="请输入手机号" type="text" v-model="phone"></mt-field>
-
-			<mt-field
-			placeholder="请输入验证码"
-			type="text"
-			v-model="code">
-				<mt-button
-				type="primary"
-				v-if="downTime.time"
-				disabled>
-					重新发送({{ downTime.time }})
-				</mt-button>
-				<mt-button type="primary" @click="sendSms" v-else>发送验证码</mt-button>
-			</mt-field>
-
-			<mt-field placeholder="请输入新密码" type="tel" v-model="newpass"></mt-field>
+			<div class="bg-phone mt-field-con">
+				<mt-field placeholder="请输入手机号" type="text" v-model="phone"></mt-field>
+			</div>
+			<div class="bg-sms mt-field-con">
+				<mt-field placeholder="请输入验证码" type="text" v-model="code">
+					<mt-button type="primary" v-if="downTime.time" disabled>重新发送({{ downTime.time }})</mt-button>
+					<mt-button type="primary" @click="sendSms" v-else>获取验证码</mt-button>
+				</mt-field>
+			</div>
+			<div class="bg-password mt-field-con">
+				<mt-field placeholder="输入新密码" type="password" v-model="newpass"></mt-field>
+			</div>
+			<div class="bg-choose mt-field-con">
+				<mt-field placeholder="确认新密码" type="password" v-model="newpass2"></mt-field>
+			</div>
 		</div>
 		<div class="btn-register">
-			<mt-button size="large" type="primary" @click="forget">提交</mt-button>
+			<mt-button size="large" type="primary" @click="forget">确定</mt-button>
 		</div>
 	</div>
 </template>
@@ -40,6 +36,7 @@
 			return {
 				phone: '',
 				newpass: '',
+				newpass2: '',
 				code: '',
 				valid: {
 					msg: '',
@@ -115,6 +112,18 @@
 					MessageBox.alert('请填写新密码！', '提示');
 					return false;
 				}
+				if (!requiredMe(_this.newpass2)) {
+					_this.valid.msg = '请确认新密码！';
+					_this.valid.ok = false;
+					MessageBox.alert('确认新密码未填！', '提示');
+					return false;
+				}
+				if (_this.newpass2 !== _this.newpass) {
+					_this.valid.msg = '两次输入的新密码不一致！';
+					_this.valid.ok = false;
+					MessageBox.alert('确认新密码有误！', '提示');
+					return false;
+				}
 				if (!requiredMe(_this.code)) {
 					_this.valid.msg = '验证码必填！';
 					_this.valid.ok = false;
@@ -124,7 +133,7 @@
 				let postTpl = {
 					phone: _this.phone,
 					password: _this.newpass,
-					code: _this.code
+					smsCode: _this.code
 				};
 				axios.put(apis.urls.forget, postTpl)
 				.then((response) => {
@@ -157,11 +166,6 @@
 </script>
 <style lang="scss">
 	@import '../../assets/sass/partials/_var.scss';
+	@import '../../assets/sass/partials/_border.scss';
 
-	.forget .btn-register .mint-button {
-		background: $color-red;
-	}
-	.forget .content .mint-button {
-		background: $color-red;
-	}
 </style>

@@ -5,6 +5,8 @@ import pureOrders from './orders.js';  //  订单列表
 import pureOrder from './order.js';  //  订单详情
 import pureShoppingCartList from './shoppingCartList.js';  //  购物车列表
 import pureInfoEdit from './infoEdit.js';  //  修改用户信息
+import purePackageList from './packageList.js';  //  套餐列表
+import pureQueryData from './queryData.js';  //  流量查询
 
 export {
 	pureAddressList,
@@ -13,5 +15,7 @@ export {
 	pureOrders,
 	pureOrder,
 	pureShoppingCartList,
-	pureInfoEdit
+	pureInfoEdit,
+	purePackageList,
+	pureQueryData
 };

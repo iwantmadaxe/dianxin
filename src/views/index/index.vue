@@ -94,7 +94,7 @@
 	import { readLocal, saveLocal } from '../../utils/localstorage.js';
 
 	export default {
-		name: 'boss-index',
+		name: 'dx-index',
 		data () {
 			return {
 				bannerHeight: '',

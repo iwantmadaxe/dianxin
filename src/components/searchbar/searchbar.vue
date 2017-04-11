@@ -5,7 +5,7 @@
 		<div class="user-top-nav">
 			<div class="user-info-con">
 				<div class="rad user-head">
-					<img v-bind:src="mine.avatar?mine.avatar: defaultAvatar">
+					<img>
 				</div>
 				<div v-if="token" class="user-info">
 					<div class="user-info-row">
@@ -32,16 +32,13 @@
 	import { saveLocal, readLocal } from '../../utils/localstorage.js';
 	import apis from '../../apis';
 	import axios from 'axios';
-
-	const DefaultAvatar = require('../../assets/images/my/my-default-head.png');
-
+	
 	export default {
 		name: 'search-bar',
 		data () {
 			return {
 				mine: {},
-				token: '',
-				defaultAvatar: DefaultAvatar
+				token: ''
 			};
 		},
 		created () {

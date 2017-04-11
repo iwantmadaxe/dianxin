@@ -1,9 +1,10 @@
 /* Base Color */
-$color-blue: #26a2ff;
+$color-blue: #4d94ff;
 $color-white: #fff;
 $color-black: #000;
 $color-text: #333;
-$color-grey: #d9d9d9;
+$color-gray: #a9abab;
+$color-gray-dx: #8691a6;
 $color-yellow: #ef8a01;
 $color-red: #c91425;
 $color-context-title: #969696;
@@ -59,7 +60,7 @@ $z-index-middle: 10;
 $search-bar-gradient-color: #c91523;
 
 /* Border Color */
-$border-gray: #f0f0f0;
+$border-gray: #e5e5e5;
 $button-border-gray: #dcdcdc;
 $button-border-red: #d91100;
 
@@ -77,9 +78,11 @@ $connect-color: #0068b7;
 $page-title: 0.16rem;
 $square-title: 0.14rem;
 $normal-text: 0.12rem;
-$input-text: 0.12rem;
+$input-text: 0.14rem;
 $big-text: 0.16rem;
 $price: 0.18rem;
+$package-title: 0.12rem;
+$navbar-title: 0.13rem;
 $order-title: 0.13rem;
 $text-area-size: 0.14rem;
 $coupon-topic: 0.25rem;

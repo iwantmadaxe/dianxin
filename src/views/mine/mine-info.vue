@@ -1,89 +1,275 @@
 <template>
-	<div class="odin-mine-info">
-		<mt-field placeholder="姓名" type="text" v-model="username"></mt-field>
-		<mt-field placeholder="请输入手机号" type="tel" v-model="phone"></mt-field>
-		<mt-field placeholder="公司名" type="text" v-model="company"></mt-field>
-
-		<div class="info-change">
-			<mt-button size="large" type="primary" @click="save">确认修改</mt-button>
+	<div class="dx-mine-info input-field-con cl-fx">
+		<div class="content common-navbar">
+			<div class="mt-field-con">
+				<mt-field placeholder="请输入姓名" type="text" v-model="name"></mt-field>
+			</div>
+			<div class="mt-field-con">
+				<mt-field placeholder="请输入邮箱" type="text" v-model="mail"></mt-field>
+			</div>
+		</div>
+		<div class="operate cl-fx">
+			<div class="operate-row cl-fx" v-for="item in detail[0].attributes">
+				<div
+					class="choose-con cl-fx"
+					readonly
+					@click="changeAreaVisible">
+					<div v-if="address.defaultPath.province.name === ''" class="choose-area color-gray">
+						地址选择
+					</div>
+					<div v-else class="choose-area color-black">
+						{{address.defaultPath.province.name}}-
+						{{address.defaultPath.city.name}}-
+						{{address.defaultPath.district.name}}
+					</div>
+				</div>
+				<k-area-picker
+				class="operate-row cl-fx"
+				v-model="areaVisible"
+				:area-choose="address.defaultPath"
+				@choose-area="chooseArea"
+				></k-area-picker>
+			</div>
+		</div>
+		<div class="register-textarea">
+			<textarea v-model="addressDetail" size="large" type="textarea" rows="5" placeholder="输入详细地址"></textarea>
+		</div>
+		<div class="btn-register">
+			<mt-button size="large" type="primary" @click="postEdit">保存</mt-button>
 		</div>
 	</div>
 </template>
-<script>
-	import apis from '../../apis';
+<script type="text/javascript">
+	import { Field, Button, MessageBox, Toast, Indicator } from 'mint-ui';
+	import { requiredMe, email } from '../../utils/valids.js';
+	import apis from '../../apis/index.js';
 	import axios from 'axios';
-	import { Field, Button, Toast, MessageBox } from 'mint-ui';
-	import { phone } from '../../utils/valids.js';
+	import { mapActions } from 'vuex';
+	import AreaPicker from '../../components/area-picker/area-picker.vue';
+	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
-		name: 'odin-mine-info',
+		name: 'dx-register',
 		data () {
 			return {
-				username: '',
-				phone: '',
-				company: '',
-				id: null,
+				token: '',
+				name: '',
+				mail: '',
+				addressDetail: '',
 				valid: {
 					msg: '',
 					ok: true
-				}
+				},
+				address: {
+					defaultPath: {
+						province: {
+							id: '',
+							code: '',
+							name: ''
+						},
+						city: {
+							code: '',
+							id: '',
+							name: ''
+						},
+						district: {
+							code: '',
+							id: '',
+							name: ''
+						}
+					}
+				},
+				detail: [
+					{
+						attributes: [
+							{
+								option: []
+							}
+						]
+					}
+				],
+				areaVisible: false
 			};
 		},
 		created () {
-			axios.get(apis.urls.register)
-			.then((response) => {
-				this.username = response.data.data.username;
-				this.phone = response.data.data.phone;
-				this.company = response.data.data.company;
-				this.id = response.data.data.id;
-			})
-			.catch((error) => {
-				apis.errors.errorPublic(error.response, this);
-			});
+			this.fetchData();
 		},
 		methods: {
-			save () {
+			...mapActions([
+				'goLogin'
+			]),
+			fetchData () {
+				Indicator.open('加载中...');
+				this.token = 'bearer ' + readLocal('user').token;
+				axios.defaults.headers.common['Authorization'] = this.token;
+				axios.get(apis.urls.userProfile)
+				.then((response) => {
+					this.name = response.data.data.name;
+					this.mail = response.data.data.email;
+					this.addressDetail = response.data.data.address;
+					this.address.defaultPath = response.data.data.area;
+					Indicator.close();
+				})
+				.catch((error) => {
+					Indicator.close();
+					apis.errors.errorLogin(error.response, this);
+					return false;
+				});
+			},
+			changeAreaVisible () {
+				if (this.areaVisible) {
+					this.areaVisible = false;
+				} else {
+					this.areaVisible = true;
+				}
+			},
+			chooseArea () {
+				let area = arguments[0];
+				this.address.defaultPath = area;
+			},
+			postEdit () {
 				let _this = this;
 				// 数据验证
-				_this.valid = {msg: '', ok: true};
-				// 手机号检测
-				if (!phone(this.phone)) {
-					this.valid.msg = '手机号格式错误！';
-					this.valid.ok = false;
-					MessageBox.alert('手机号格式错误！', '提示');
+				if (!requiredMe(_this.name)) {
+					_this.valid.msg = '请填写姓名！';
+					_this.valid.ok = false;
+					MessageBox.alert('请填写姓名！', '提示');
+					return false;
+				}
+				if (!requiredMe(_this.mail)) {
+					_this.valid.msg = '请填写邮箱！';
+					_this.valid.ok = false;
+					MessageBox.alert('请填写邮箱！', '提示');
+					return false;
+				}
+				if (!email(_this.mail)) {
+					_this.valid.msg = '邮箱格式错误！';
+					_this.valid.ok = false;
+					MessageBox.alert('邮箱格式错误！', '提示');
+					return false;
+				}
+				if (!requiredMe(_this.address.defaultPath.district.code)) {
+					_this.valid.msg = '地址必选！';
+					_this.valid.ok = false;
+					MessageBox.alert('请选择地址！', '提示');
+					return false;
+				}
+				if (!requiredMe(_this.addressDetail)) {
+					_this.valid.msg = '详细地址必填！';
+					_this.valid.ok = false;
+					MessageBox.alert('请填写详细地址！', '提示');
 					return false;
 				}
 				// 发送请求
 				// 组织发送请求参数
 				let postTpl = {
-					phone: this.phone,
-					username: this.username,
-					company: this.company,
-					_method: 'PUT'
+					name: _this.name,
+					email: _this.mail,
+					areaCode: _this.address.defaultPath.district.code,
+					address: _this.addressDetail
 				};
-				axios.post(apis.urls.register, postTpl)
+				axios.put(apis.urls.userProfileEdit, postTpl)
 				.then((response) => {
 					// 提示成功并返回登录
 					Toast({
-						message: '修改成功！',
+						message: '保存成功！',
 						iconClass: 'mintui mintui-success'
 					});
-					this.$router.push({name: 'Mine'});
+					_this.$router.push({name: 'Mine'});
 				})
 				.catch((error) => {
-					apis.errors.errorRegister(error.response, _this);
+					apis.errors.errorPublic(error.response, _this);
+					return false;
 				});
 			}
 		},
 		components: {
 			[Field.name]: Field,
-			[Button.name]: Button
+			[Button.name]: Button,
+			[AreaPicker.name]: AreaPicker,
+			[Indicator.name]: Indicator
 		}
 	};
 </script>
-<style>
-	.odin-mine-info .info-change{
-		width: 90%;
-		margin: 20px auto;
+<style lang="scss">
+	@import '../../assets/sass/partials/_var.scss';
+	@import '../../assets/sass/partials/_border.scss';
+
+	.dx-mine-info .mint-field-core {
+	    padding: 0.1rem 0.2rem;
+	}
+	.dx-mine-info .operate {
+		width: 100%;
+	    margin: 0.35rem 0 0;
+	    .operate-row {
+		    height: auto;
+	    	line-height: 0.25rem;
+		    display: -webkit-box;
+		    display: -ms-flexbox;
+		    display: flex;
+		    .title {
+				font-size: $normal-text;
+		        min-width: 0.6rem;
+				float: left;
+			}
+			.choose-con {
+				font-size: $normal-text;
+				width: 100%;
+				.color-gray {
+					color: $color-gray;
+				}
+				.color-black {
+					color: $color-text;
+				}
+				.choose-area {
+			        width: 80%;
+			    	padding: 0 0.2rem;
+				    height: 0.35rem;
+				    line-height: 0.35rem;
+				    text-align: left;
+				    border-radius: 0.2rem;
+				    height: 0.35rem;
+				    margin: 0 auto;
+				    background-color: $bg-gray;
+				    background-image: url('../../assets/images/login/select.png');
+				    background-repeat: no-repeat;
+					background-size: 0.09rem 0.1rem;
+			    	background-position: 96% center;
+				}
+			}
+			.choose-button {
+				min-width: 0.65rem;
+		    	padding: 0 0.1rem;
+				height: 0.24rem;
+				line-height: 0.24rem;
+				text-align: center;
+				color: $color-text;
+				border: 0.01rem solid $border-gray;
+				border-radius: 0.03rem;
+			    float: left;
+			    margin: 0 0 0.1rem 0.08rem;
+			}
+			.choose-button-active {
+				background-image: url('../../assets/images/index/button-active.png');
+			    background-repeat: no-repeat;
+			    background-size: 0.09rem 0.09rem;
+			    background-position: 100% 100%;
+			    border: 0.01rem solid $color-context-active;
+			    color: $color-context-active;
+			}
+		}
+	}
+
+	.dx-mine-info .register-textarea {
+		width: 80%;
+		margin: 0.15rem auto 0;
+		textarea {
+			width: 100%;
+			display: block;
+			resize: none;
+			background: $bg-gray;
+			border: 0;
+			padding: 0.1rem;
+		}
 	}
 </style>

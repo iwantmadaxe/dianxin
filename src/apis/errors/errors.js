@@ -22,6 +22,7 @@ const errors = function (error, _this) {
 		MessageBox.alert('网络错误！', '提示');
 		return false;
 	} else {
+		console.log(error.data);
 		return error.data;
 	}
 };

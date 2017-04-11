@@ -1,5 +1,6 @@
 import errors from './errors.js';
 import { MessageBox } from 'mint-ui';
+
 const errorLogin = function (response, _this) {
 	if (errors(response, _this) === false) {
 		return false;
