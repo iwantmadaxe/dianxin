@@ -108,15 +108,17 @@
 					return false;
 				}
 				// 发送验证码
-				axios.get(apis.urls.sms, {params: {phone: _this.phone, type: 'login'}}).then((response) => {
+				axios.get(apis.urls.sms, {params: {phone: _this.phone, type: 'login'}})
+				.then((response) => {
 					Toast({
 						message: '发送成功！',
 						iconClass: 'mintui mintui-success'
 					});
 					_this.valid = {msg: '', ok: true};
 					return false;
-				}, (response) => {
-					apis.errors(response, _this);
+				})
+				.catch((error) => {
+					apis.errors(error.response, this);
 					return false;
 				});
 			},

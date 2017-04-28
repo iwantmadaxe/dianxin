@@ -13,6 +13,11 @@ import QueryData from '../views/query/data.vue'; // 查询流量页面
 import RecordList from '../views/query/record-list.vue'; // 消费记录页面
 import EditPhone from '../views/edit/phone.vue'; // 修改手机号页面
 import EditPassword from '../views/edit/password.vue'; // 修改密码页面
+import CertAdd from '../views/cert/certAdd.vue'; // 认证添加页面
+import CertWait from '../views/cert/certWait.vue'; // 认证添加已提交页面
+import CertFail from '../views/cert/certFail.vue'; // 认证添加失败页面
+import CertSuccess from '../views/cert/certSuccess.vue'; // 认证添加成功页面
+import CertList from '../views/cert/list.vue'; // 认证列表页面
 
 Vue.use(Router);
 
@@ -120,6 +125,46 @@ export default new Router({
 			component: MineInfoEdit,
 			meta: {
 				title: '个人信息修改'
+			}
+		},
+		{
+			path: '/cert/list',
+			name: 'CertList',
+			component: CertList,
+			meta: {
+				title: '认证列表'
+			}
+		},
+		{
+			path: '/cert/add',
+			name: 'CertAdd',
+			component: CertAdd,
+			meta: {
+				title: '实名认证'
+			}
+		},
+		{
+			path: '/cert/wait',
+			name: 'CertWait',
+			component: CertWait,
+			meta: {
+				title: '实名认证-已提交'
+			}
+		},
+		{
+			path: '/cert/success',
+			name: 'CertSuccess',
+			component: CertSuccess,
+			meta: {
+				title: '实名认证-已经通过'
+			}
+		},
+		{
+			path: '/cert/fail',
+			name: 'CertFail',
+			component: CertFail,
+			meta: {
+				title: '实名认证-失败'
 			}
 		},
 		{

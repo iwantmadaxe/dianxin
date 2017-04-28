@@ -73,14 +73,6 @@
 					</div>
 				</div>
 			</div>
-<!-- 			<div class="package-select cl-fx service-con-border">
-				<div class="package-topic cl-fx">
-					<img class="topic-left-icon" src="../../assets/images/index/package-left.png">
-					<span class="topic">精选套餐</span>
-					<img class="topic-right-icon" src="../../assets/images/index/package-right.png">
-				</div>
-				<img class="package-index" src="../../assets/images/index/package-index.png">
-			</div> -->
 		</div>
 	</div>
 </template>
@@ -89,9 +81,9 @@
 	import SearchBar from '../../components/searchbar/searchbar.vue';
 	import BottomPannel from '../share-template/bottom-pannel.vue';
 	import { Swipe, SwipeItem } from 'mint-ui';
-	import apis from '../../apis/index.js';
-	import axios from 'axios';
-	import { readLocal, saveLocal } from '../../utils/localstorage.js';
+	// import apis from '../../apis/index.js';
+	// import axios from 'axios';
+	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
 		name: 'dx-index',
@@ -120,13 +112,15 @@
 			if (serviceCategoryCache) {
 				_this.categoryData = serviceCategoryCache;
 			} else {
-				axios.get(apis.urls.category).then((response) => {
-					_this.categoryData = response;
-					saveLocal('serviceCategory', _this.categoryData);
-				}, (response) => {
-					apis.errors(response, _this);
-					return false;
-				});
+				// axios.get(apis.urls.category)
+				// .then((response) => {
+				// 	_this.categoryData = response;
+				// 	saveLocal('serviceCategory', _this.categoryData);
+				// })
+				// .catch((error) => {
+				// 	apis.errors.errorPublic(error.response, this);
+				// 	return false;
+				// });
 			}
 		},
 		methods: {

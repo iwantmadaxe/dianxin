@@ -12,7 +12,9 @@ const apiRoutes = {
 	flow: 'flow/packages',  //  套餐列表 dx项目至此
 	flowCheck: 'flow/balance',  //  流量查询
 	flowRecord: 'package/record',  //  消费记录
-	address: 'option/area'  //  地址列表
+	address: 'option/area',  //  地址列表
+	certPost: 'user/certificate',  //  实名认证
+	certList: 'user/certificates'  //  认证列表
 };
 
 export default apiRoutes;

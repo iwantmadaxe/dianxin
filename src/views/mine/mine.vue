@@ -31,6 +31,13 @@
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
+			<div class="mine-list-row" @click="goCert">
+				<img class="left-icon" src="../../assets/images/login/msg.png">
+				<div class="list-row-context">
+					<span class="title">实名认证</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
 		</div>
 		<div class="logout-row" @click="logout">
 			退出登录
@@ -83,6 +90,9 @@
 			}
 		},
 		methods: {
+			goCert () {
+				this.$router.push({name: 'CertList'});
+			},
 			goEditPhone () {
 				this.$router.push({name: 'EditPhone'});
 			},

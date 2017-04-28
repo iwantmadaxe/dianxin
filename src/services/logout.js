@@ -8,5 +8,6 @@ export default function () {
 	clearLocal('coupon-list');
 	delCookie('has_auth');
 	delCookie('api_token');
+	delCookie('token');
 	return true;
 };
