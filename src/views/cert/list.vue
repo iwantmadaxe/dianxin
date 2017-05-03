@@ -124,8 +124,8 @@
 				display: -webkit-box;
 				display: -ms-flexbox;
 				display: flex;
-				height: 0.24rem;
-				line-height: 0.24rem;
+				height: 0.32rem;
+				line-height: 0.32rem;
 				border-bottom: 1px solid $border-gray;
 				.cert-id {
 					width: 0.6rem;

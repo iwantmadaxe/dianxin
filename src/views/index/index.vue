@@ -1,74 +1,38 @@
 <template>
 	<div class="index">
-		<!-- 头部搜索 -->
-		<div class="fixedtop">
-			<search-bar search-place="" :disabled="true">
-<!-- 				<img src="../../assets/images/logo/logo.png" slot="search-icon-logo">
-				<img src="../../assets/images/index/mag.png" slot="search-form-icon">
-				<a v-link="{name: 'Login'}" slot="search-btn">
-					<span class="search-login-icon">登录</span>
-				</a> -->
-			</search-bar>	
-		</div>
-		<!-- 底部栏 -->
-		<boss-bottom-pannel tab-selected="home"></boss-bottom-pannel>
 		<div class="scwrapper">
 			<div class="banner-con" v-bind:style="{ height: bannerHeight}">
-				<mt-swipe :auto="2000">
-					<mt-swipe-item>
-						<img class="banner-img" src="../../assets/images/index/banner1.png">
-					</mt-swipe-item>
-					<mt-swipe-item>
-						<img class="banner-img" src="../../assets/images/index/banner1.png">
-					</mt-swipe-item>
-					<mt-swipe-item>
-						<img class="banner-img" src="../../assets/images/index/banner1.png">
-					</mt-swipe-item>
-				</mt-swipe>
+				<img class="banner-img" src="../../assets/images/index/banner.png">
 			</div>
 			<div class="service-bg cl-fx">
-				<p class="servie-title">{{categoryData.data.data.category[activeCate].name}}</p>
-				<div class="service-con cl-fx">
-					<div @click="goServiceDetail(item.id)" class="service-icon-square" v-for="item in categoryData.data.data.category[activeCate].child">
-						<img v-bind:src="item.icon">
-						<p>{{item.name}}</p>
-					</div>
+				<div class="hide">
 				</div>
-				<div class="service-con cl-fx service-con-border" style="margin-top: 0.1rem;">
-					<div class="service-topic-square-con cl-fx">
+				<div class="service-con cl-fx service-con-border">
+					<div @click="goPackageList" class="service-topic-square-con cl-fx" style="border-bottom: 1px solid #e5e5e5;border-right: 1px solid #e5e5e5;">
 						<div class="rad service-topic-square">
 							<img src="../../assets/images/index/service-square1.png">
 						</div>
 						<div class="text">
-							<p class="topic one-line">租赁服务</p>
-							<p class="exp one-line">场地租赁 设备租赁</p>
+							<p class="topic one-line">套餐列表</p>
+							<p class="exp">更多超值优惠套餐</p>
 						</div>
 					</div>
-					<div class="service-topic-square-con cl-fx">
+					<div @click="goFlowCheck" class="service-topic-square-con cl-fx" style="border-bottom: 1px solid #e5e5e5;">
 						<div class="rad service-topic-square">
 							<img src="../../assets/images/index/service-square2.png">
 						</div>
 						<div class="text">
-							<p class="topic one-line">税务服务</p>
-							<p class="exp one-line">场地租赁 设备租赁</p>
+							<p class="topic one-line">流量查询</p>
+							<p class="exp">看看还剩下多少流量吧</p>
 						</div>
 					</div>
-					<div class="service-topic-square-con cl-fx">
+					<div @click="goFlowRecord" class="service-topic-square-con cl-fx" style="border-right: 1px solid #e5e5e5;">
 						<div class="rad service-topic-square">
 							<img src="../../assets/images/index/service-square3.png">
 						</div>
 						<div class="text">
-							<p class="topic one-line">成长期服务</p>
-							<p class="exp one-line">场地租赁 设备租赁</p>
-						</div>
-					</div>
-					<div class="service-topic-square-con cl-fx">
-						<div class="rad service-topic-square">
-							<img src="../../assets/images/index/service-square4.png">
-						</div>
-						<div class="text">
-							<p class="topic one-line">资质认证</p>
-							<p class="exp one-line">场地租赁 设备租赁</p>
+							<p class="topic one-line">消费记录</p>
+							<p class="exp">钱都花在哪儿了吧</p>
 						</div>
 					</div>
 				</div>
@@ -83,49 +47,31 @@
 	import { Swipe, SwipeItem } from 'mint-ui';
 	// import apis from '../../apis/index.js';
 	// import axios from 'axios';
-	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
 		name: 'dx-index',
 		data () {
 			return {
-				bannerHeight: '',
-				categoryData: {
-					data: {
-						data: {
-							category: [
-								{
-									child: []
-								}
-							]
-						}
-					}
-				},  //  服务类别
-				activeCate: 0  //  初始状态的服务
+				bannerHeight: ''
 			};
 		},
 		created () {
 			let _this = this;
 			// document.background.color = '#e9ecf5';
 			_this.bannerHeight = document.body.clientWidth / 640 * 330 + 'px';
-			let serviceCategoryCache = readLocal('serviceCategory');
-			if (serviceCategoryCache) {
-				_this.categoryData = serviceCategoryCache;
-			} else {
-				// axios.get(apis.urls.category)
-				// .then((response) => {
-				// 	_this.categoryData = response;
-				// 	saveLocal('serviceCategory', _this.categoryData);
-				// })
-				// .catch((error) => {
-				// 	apis.errors.errorPublic(error.response, this);
-				// 	return false;
-				// });
-			}
 		},
 		methods: {
 			goServiceDetail (id) {
 				this.$router.push({name: 'ServiceList', params: {category_no: id}});
+			},
+			goPackageList () {
+				this.$router.push({name: 'PackageListChoose'});
+			},
+			goFlowCheck () {
+				this.$router.push({name: 'QueryDataChoose'});
+			},
+			goFlowRecord () {
+				this.$router.push({name: 'RecordListChoose'});
 			}
 		},
 		components: {
@@ -261,6 +207,18 @@
 	}
 	.index .service-bg {
 		background: #fff;
+		position: relative;
+	}
+	.index .service-bg .hide{
+		background: #fff;
+		position: absolute;
+		width: 0.4rem;
+	    height: 0.4rem;
+	    left: 0;
+	    right: 0;
+	    top: 0;
+	    bottom: 0;
+	    margin: auto;
 	}
 	.index .service-con-border {
 	    border-top: 0.01rem solid #edefef;
@@ -287,7 +245,7 @@
 	.index .service-con .service-topic-square-con{
 		width: 50%;
 	    float: left;
-	    padding: 0.1rem 0;
+        padding: 0.25rem 2% 0.25rem 5%;
 	}
 	.index .service-con .service-topic-square-con .service-topic-square{
 		width: 40px;
@@ -303,7 +261,7 @@
 	    display: block;
 	}
 	.index .service-topic-square-con .text {
-	    width: 65%;
+	    width: 60%;
 	    float: left;
 	}
 	.index .service-topic-square-con .text .topic {
@@ -313,9 +271,11 @@
 	}
 	.index .service-topic-square-con .text .exp {
 	    font-size: $normal-text;
-	    color: #646464;
+	    color: $color-gray;
 	    text-align: left;
-	    margin-top: 0.05rem;
+        margin-top: 0.1rem;
+        height: 0.28rem;
+        line-height: 0.14rem;
 	}
 	.index .package-select {
 	    width: 100%;

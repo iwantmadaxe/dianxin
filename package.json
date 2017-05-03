@@ -94,6 +94,7 @@
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
     "webpack-merge": "^2.6.1",
+    "weixin-js-sdk": "^1.2.0",
     "wide-align": "^1.1.0"
   },
   "engines": {

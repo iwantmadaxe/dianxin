@@ -18,6 +18,7 @@
 		name: 'package-square',
 		data () {
 			return {
+				id: '',
 				token: '',
 				data: [
 					{}
@@ -26,18 +27,13 @@
 		},
 		created () {
 			Indicator.open('加载中...');
+			// 获取订单号
+			this.id = this.$route.params.id;
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
-			axios.get(apis.urls.flowRecord)
+			axios.get(apis.urls.flowRecord, {params: {card_id: this.id}})
 			.then((response) => {
 				this.data = response.data.data;
-				this.data = [{
-					id: 2,
-					package_name: '套餐',
-					package_price: 1000,
-					end_time: '2017-04-06',
-					start_time: '2017-04-10'
-				}];
 				Indicator.close();
 			})
 			.catch((error) => {

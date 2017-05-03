@@ -29,6 +29,7 @@
 		name: 'package-square',
 		data () {
 			return {
+				id: '',
 				token: '',
 				data: {
 					total: '',
@@ -50,9 +51,10 @@
 		},
 		created () {
 			Indicator.open('加载中...');
+			this.id = this.$route.params.id;
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
-			axios.get(apis.urls.flowCheck)
+			axios.get(apis.urls.flowCheck, {params: {card_id: this.id}})
 			.then((response) => {
 				this.data = apis.pures.pureQueryData(response.data.data);
 				Indicator.close();

@@ -7,6 +7,7 @@ import pureShoppingCartList from './shoppingCartList.js';  //  购物车列表
 import pureInfoEdit from './infoEdit.js';  //  修改用户信息
 import purePackageList from './packageList.js';  //  套餐列表
 import pureQueryData from './queryData.js';  //  流量查询
+import pureCardList from './cardList.js';  //  卡列表
 
 export {
 	pureAddressList,
@@ -17,5 +18,6 @@ export {
 	pureShoppingCartList,
 	pureInfoEdit,
 	purePackageList,
-	pureQueryData
+	pureQueryData,
+	pureCardList
 };

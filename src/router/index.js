@@ -18,6 +18,11 @@ import CertWait from '../views/cert/certWait.vue'; // 认证添加已提交页�
 import CertFail from '../views/cert/certFail.vue'; // 认证添加失败页面
 import CertSuccess from '../views/cert/certSuccess.vue'; // 认证添加成功页面
 import CertList from '../views/cert/list.vue'; // 认证列表页面
+import MsgCenter from '../views/msg/list.vue'; // 消息中心页面
+import CardChoose from '../views/card/choose.vue'; // 卡选择页面
+import RecordListChoose from '../views/query/listChoose.vue'; // 选择套餐列表页面
+import QueryDataChoose from '../views/query/dataChoose.vue'; // 选择查询流量页面
+import PackageListChoose from '../views/package/listChoose.vue'; // 选择套餐列表页面
 
 Vue.use(Router);
 
@@ -64,25 +69,58 @@ export default new Router({
 			}
 		},
 		{
-			path: '/package/list',
+			path: '/package/list/:id',
 			name: 'PackageList',
 			component: PackageList,
+			params: {
+				id: null
+			},
 			meta: {
 				title: '套餐列表'
 			}
 		},
 		{
-			path: '/query/data',
+			path: '/query/data/:id',
 			name: 'QueryData',
 			component: QueryData,
+			params: {
+				id: null
+			},
 			meta: {
 				title: '查询流量'
 			}
 		},
 		{
-			path: '/query/record-list',
+			path: '/package/list/choose',
+			name: 'PackageListChoose',
+			component: PackageListChoose,
+			meta: {
+				title: '套餐列表选择'
+			}
+		},
+		{
+			path: '/query/list/choose',
+			name: 'RecordListChoose',
+			component: RecordListChoose,
+			meta: {
+				title: '选择消费记录'
+			}
+		},
+		{
+			path: '/query/data/choose',
+			name: 'QueryDataChoose',
+			component: QueryDataChoose,
+			meta: {
+				title: '选择查询流量'
+			}
+		},
+		{
+			path: '/query/record-list/:id',
 			name: 'RecordList',
 			component: RecordList,
+			params: {
+				id: null
+			},
 			meta: {
 				title: '消费记录'
 			}
@@ -165,6 +203,22 @@ export default new Router({
 			component: CertFail,
 			meta: {
 				title: '实名认证-失败'
+			}
+		},
+		{
+			path: '/msg/center',
+			name: 'MsgCenter',
+			component: MsgCenter,
+			meta: {
+				title: '消息通知'
+			}
+		},
+		{
+			path: '/card/choose',
+			name: 'CardChoose',
+			component: CardChoose,
+			meta: {
+				title: '卡选择'
 			}
 		},
 		{

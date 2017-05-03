@@ -226,14 +226,14 @@
 	    bottom: 0;
 	    left: 0;
 	    right: 0;
-	    background: $color-red;
+	    background: $color-blue;
 	    width: 70%;
 	    content: "";
 	}
 	.k-area-heading .mint-tab-item {
 		position: relative;
 		.mint-tab-item-label {
-			color: $color-red;
+			color: $color-blue;
 		}
 	}
 	.k-area-heading .mint-navbar .mint-tab-item{
@@ -243,7 +243,7 @@
 		font-size: 13px;
 	}
 	.k-area-heading .is-selected .area-select-content{
-		border-bottom: 2px solid $color-red;
+		border-bottom: 2px solid $color-blue;
 		margin-bottom: -2px;
 		font-size: 13px;
 	}
@@ -272,11 +272,11 @@
 				}
 			}
 			&:checked~.area-choose{
-				color: red;
+				color: $color-blue;
 				opacity: 1;
 			}
 			&:checked+.area-name{
-				color: red;
+				color: $color-blue;
 			}
 		}
 	}

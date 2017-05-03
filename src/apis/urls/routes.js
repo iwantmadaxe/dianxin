@@ -3,7 +3,6 @@ const apiRoutes = {
 	user: 'user',    // 注册
 	editPhone: 'user/phone',  //  修改用户手机号
 	editPassword: 'user/password',  //  修改用户密码
-	mine: 'user/mine',    // 我的页面
 	userProfile: 'user/profile',  //  用户信息
 	userProfileEdit: 'user',  //  修改用户信息
 	login: 'user/login',  //  登陆
@@ -14,7 +13,9 @@ const apiRoutes = {
 	flowRecord: 'package/record',  //  消费记录
 	address: 'option/area',  //  地址列表
 	certPost: 'user/certificate',  //  实名认证
-	certList: 'user/certificates'  //  认证列表
+	certList: 'user/certificates',  //  认证列表
+	cardsList: 'user/cards',  //  卡列表
+	postOrder: 'package'  //  下订单
 };
 
 export default apiRoutes;

@@ -3,7 +3,7 @@
 		<div v-show="item.choose" class="choose-icon">
 		</div>
 		<div class="title">
-			{{item.name}}
+			{{item.name?item.name:'暂无'}}
 		</div>
 		<div class="topic one-line">
 			<span class="num">{{item.price}}</span>
@@ -30,6 +30,11 @@
 						choose: null
 					};
 				}
+			},
+			list: {
+				default: function () {
+					return [];
+				}
 			}
 		},
 		methods: {
@@ -38,6 +43,10 @@
 				if (_this.item.choose) {
 					_this.item.choose = false;
 				} else {
+					_this.list.map(function (item) {
+						item.choose = false;
+						return item;
+					});
 					_this.item.choose = true;
 				}
 			}

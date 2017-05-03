@@ -42,13 +42,10 @@
 		<div class="logout-row" @click="logout">
 			退出登录
 		</div>
-		<!-- 底部栏 -->
-		<boss-bottom-pannel tab-selected="mine"></odin-bottom-pannel>
 	</div>
 </template>
 <script>
 	import { Indicator, Button, MessageBox } from 'mint-ui';
-	import BottomPannel from '../share-template/bottom-pannel.vue';
 	import { saveLocal, readLocal } from '../../utils/localstorage.js';
 	import apis from '../../apis';
 	import axios from 'axios';
@@ -123,7 +120,6 @@
 			}
 		},
 		components: {
-			[BottomPannel.name]: BottomPannel,
 			[Button.name]: Button,
 			[MessageBox.name]: MessageBox,
 			[Indicator.name]: Indicator
