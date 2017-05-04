@@ -4,17 +4,17 @@
 			<mt-tab-item id="home" @click.native="goPath('home')">
 				<img slot="icon" v-if="currentTabSelected === 'home'" src="../../assets/images/tab-bars/home-confirm.png">
 				<img slot="icon" v-else src="../../assets/images/tab-bars/home.png">
-				企业服务
+				首页
 			</mt-tab-item>
-			<mt-tab-item id="enroll" @click.native="goPath('OrderMine')">
-				<img slot="icon" v-if="currentTabSelected === 'enroll'" src="../../assets/images/tab-bars/wait-confirm.png">
-				<img slot="icon" v-else src="../../assets/images/tab-bars/wait.png">
-				订单列表
+			<mt-tab-item id="enroll" @click.native="goPath('PackageList')">
+				<img slot="icon" v-if="currentTabSelected === 'enroll'" src="../../assets/images/tab-bars/list-confirm.png">
+				<img slot="icon" v-else src="../../assets/images/tab-bars/list.png">
+				套餐列表
 			</mt-tab-item>
-			<mt-tab-item id="shoppingcart" @click.native="goPath('ShoppingCart')">
-				<img slot="icon" v-if="currentTabSelected === 'shoppingcart'" src="../../assets/images/tab-bars/wait-confirm.png">
-				<img slot="icon" v-else src="../../assets/images/tab-bars/wait.png">
-				购物车列表
+			<mt-tab-item id="shoppingcart" @click.native="goPath('QueryData')">
+				<img slot="icon" v-if="currentTabSelected === 'shoppingcart'" src="../../assets/images/tab-bars/data-confirm.png">
+				<img slot="icon" v-else src="../../assets/images/tab-bars/data.png">
+				消费记录
 			</mt-tab-item>
 			<mt-tab-item id="mine" @click.native="goPath('mine')">
 				<img slot="icon" v-if="currentTabSelected === 'mine'" src="../../assets/images/tab-bars/my-confirm.png">
@@ -58,13 +58,13 @@
 					return false;
 				}
 				// 跳转<>
-				if (place === 'OrderMine') {
-					this.$router.push({name: 'OrderMine'});
+				if (place === 'PackageList') {
+					this.$router.push({name: 'PackageListChoose'});
 					return false;
 				}
 				// 跳转<>
-				if (place === 'ShoppingCart') {
-					this.$router.push({name: 'ShoppingCart'});
+				if (place === 'QueryData') {
+					this.$router.push({name: 'QueryDataChoose'});
 					return false;
 				}
 				// 跳转<>
@@ -86,6 +86,5 @@
 		height: 0.55rem;
 	} */
 	.bottom-bar-pannel .mint-tabbar > .mint-tab-item.is-selected {
-	    color: #ca1728;
 	}
 </style>

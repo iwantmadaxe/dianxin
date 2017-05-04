@@ -38,6 +38,8 @@
 				</div>
 			</div>
 		</div>
+		<!-- 底部栏 -->
+		<boss-bottom-pannel tab-selected="home"></boss-bottom-pannel>
 	</div>
 </template>
 

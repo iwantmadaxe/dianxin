@@ -1,10 +1,10 @@
 <template>
-	<div class="cert-list input-field-con cl-fx">
+	<div class="cert-list list-con cl-fx">
 		<div class="title">
 			认证列表
 		</div>
-		<div class="cert-list-con" v-for="item in list">
-			<div class="cert-list-row">
+		<div class="cert-list-con">
+			<div class="cert-list-row" v-for="item in list">
 				<div class="cert-id">
 					{{item.id?item.id:'暂无'}}
 				</div>
@@ -18,6 +18,9 @@
 					{{item.status}}
 				</div>
 			</div>
+		</div>
+		<div v-show="list.length === 0" class="list-null">
+			暂无记录!
 		</div>
 		<div class="btn-register">
 			<mt-button size="large" type="primary" @click="goAdd">添加认证</mt-button>
@@ -105,7 +108,9 @@
 	@import '../../assets/sass/partials/_var.scss';
 	@import '../../assets/sass/partials/_border.scss';
 	
-	.cert-list {
+	.list-con {
+		background: $color-white;
+	    min-height: 100vh;
 		.title {
 			width: 100%;
 			font-size: 0.16rem;
@@ -115,6 +120,16 @@
 			line-height: 0.32rem;
 			text-align: left;
 			padding: 0 10px;
+		}
+		.btn-register {
+			width: 100%;
+			margin: 20px auto;
+			padding: 0 10px;
+			.mint-button {
+				border-radius: 0.2rem;
+				width: 80%;
+				margin: 0 auto;
+			}
 		}
 		.cert-list-con {
 			width: 100%;

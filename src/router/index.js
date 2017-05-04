@@ -69,28 +69,6 @@ export default new Router({
 			}
 		},
 		{
-			path: '/package/list/:id',
-			name: 'PackageList',
-			component: PackageList,
-			params: {
-				id: null
-			},
-			meta: {
-				title: '套餐列表'
-			}
-		},
-		{
-			path: '/query/data/:id',
-			name: 'QueryData',
-			component: QueryData,
-			params: {
-				id: null
-			},
-			meta: {
-				title: '查询流量'
-			}
-		},
-		{
 			path: '/package/list/choose',
 			name: 'PackageListChoose',
 			component: PackageListChoose,
@@ -112,6 +90,28 @@ export default new Router({
 			component: QueryDataChoose,
 			meta: {
 				title: '选择查询流量'
+			}
+		},
+		{
+			path: '/package/list/:id',
+			name: 'PackageList',
+			component: PackageList,
+			params: {
+				id: null
+			},
+			meta: {
+				title: '套餐列表'
+			}
+		},
+		{
+			path: '/query/data/:id',
+			name: 'QueryData',
+			component: QueryData,
+			params: {
+				id: null
+			},
+			meta: {
+				title: '查询流量'
 			}
 		},
 		{

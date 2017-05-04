@@ -15,7 +15,9 @@ const apiRoutes = {
 	certPost: 'user/certificate',  //  实名认证
 	certList: 'user/certificates',  //  认证列表
 	cardsList: 'user/cards',  //  卡列表
-	postOrder: 'package'  //  下订单
+	postOrder: 'package',  //  下订单
+	msgList: 'user/messages',  //  信息列表
+	msgRead: 'user/message/read'  //  信息已读（全部）
 };
 
 export default apiRoutes;

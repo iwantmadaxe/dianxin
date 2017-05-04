@@ -42,6 +42,8 @@
 		<div class="logout-row" @click="logout">
 			退出登录
 		</div>
+		<!-- 底部栏 -->
+		<boss-bottom-pannel tab-selected="mine"></boss-bottom-pannel>
 	</div>
 </template>
 <script>
@@ -50,6 +52,7 @@
 	import apis from '../../apis';
 	import axios from 'axios';
 	import localLogout from '../../services/logout.js';
+	import BottomPannel from '../share-template/bottom-pannel.vue';
 
 	export default {
 		name: 'mine',
@@ -103,7 +106,7 @@
 				this.$router.push({name: 'MineInfoEdit'});
 			},
 			goMsgCenter () {
-
+				this.$router.push({name: 'MsgCenter'});
 			},
 			logout () {
 				axios.get(apis.urls.logout)
@@ -122,7 +125,8 @@
 		components: {
 			[Button.name]: Button,
 			[MessageBox.name]: MessageBox,
-			[Indicator.name]: Indicator
+			[Indicator.name]: Indicator,
+			[BottomPannel.name]: BottomPannel
 		}
 	};
 </script>
