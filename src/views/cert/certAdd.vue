@@ -56,6 +56,11 @@
 		name: 'dx-cert-add',
 		data () {
 			return {
+				isCert: false,
+				valid: {
+					msg: '',
+					ok: ''
+				},
 				token: '',
 				cert: {
 					name: '',
@@ -164,6 +169,10 @@
 					MessageBox.alert('请填写手机号！', '提示');
 					return false;
 				}
+				if (_this.isCert) {
+					return false;
+				}
+				_this.isCert = true;
 				let postTpl = new FormData();
 				postTpl.append('name', this.cert.name);
 				postTpl.append('card_code', this.cert.idNumber);
@@ -180,6 +189,7 @@
 					this.$router.push({name: 'CertList'});
 				})
 				.catch((error) => {
+					this.isCert = false;
 					apis.errors.errorLogin(error.response, this);
 				});
 			}
