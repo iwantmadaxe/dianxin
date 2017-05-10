@@ -60,7 +60,7 @@
 		created () {
 			let _this = this;
 			// document.background.color = '#e9ecf5';
-			_this.bannerHeight = document.body.clientWidth / 640 * 330 + 'px';
+			_this.bannerHeight = document.body.clientWidth / 320 * 130 + 'px';
 		},
 		methods: {
 			goServiceDetail (id) {

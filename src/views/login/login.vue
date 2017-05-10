@@ -29,7 +29,7 @@
 					<span @click="goForgetPage" class="fr">忘记密码</span>
 				</div>
 				<div class="btn-register">
-					<mt-button size="large" type="primary" @click="localLogin">登陆</mt-button>
+					<mt-button size="large" type="primary" @click="localLogin">登录</mt-button>
 				</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="sms-login">
@@ -49,7 +49,7 @@
 					<span @click="goForgetPage" class="fr">忘记密码？</span>
 				</div>
 				<div class="btn-register">
-					<mt-button size="large" type="primary" @click="smsLogin">登陆</mt-button>
+					<mt-button size="large" type="primary" @click="smsLogin">登录</mt-button>
 				</div>
 			</mt-tab-container-item>
 		</mt-tab-container>

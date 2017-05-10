@@ -4,9 +4,23 @@
 			认证列表
 		</div>
 		<div class="cert-list-con">
-			<div class="cert-list-row" v-for="item in list">
+			<div class="cert-list-row">
 				<div class="cert-id">
-					{{item.id?item.id:'暂无'}}
+					序号
+				</div>
+				<div class="cert-code">
+					卡号
+				</div>
+				<div class="cert-reason">
+					原因
+				</div>
+				<div class="cert-status">
+					审核状态
+				</div>
+			</div>
+			<div class="cert-list-row" v-for="(item, index) in list">
+				<div class="cert-id">
+					{{index + 1}}
 				</div>
 				<div class="cert-code">
 					{{item.card_code?item.card_code:'暂无'}}
@@ -63,14 +77,17 @@
 					this.list = response.data.data;
 					this.list.map(function (item) {
 						switch (item.status) {
-						case 0:
-							item.status = '待审核';
-							break;
 						case 1:
-							item.status = '通过';
+							item.status = '未审核';
 							break;
 						case 2:
+							item.status = '通过';
+							break;
+						case 3:
 							item.status = '未通过';
+							break;
+						default:
+							item.status = '未知状态';
 							break;
 						}
 						return item;
@@ -139,7 +156,7 @@
 				display: -webkit-box;
 				display: -ms-flexbox;
 				display: flex;
-				height: 0.32rem;
+				height: auto;
 				line-height: 0.32rem;
 				border-bottom: 1px solid $border-gray;
 				.cert-id {

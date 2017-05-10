@@ -9,9 +9,9 @@
 				<td>卡号</td>
 				<td>操作</td>
 			</tr>
-			<tr v-for="item in list">
+			<tr v-for="(item, index) in list">
 				<td>
-					{{item.id}}
+					{{index + 1}}
 				</td>
 				<td>
 					{{item.code}}

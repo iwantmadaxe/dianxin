@@ -14,7 +14,7 @@
 			<mt-tab-item id="shoppingcart" @click.native="goPath('QueryData')">
 				<img slot="icon" v-if="currentTabSelected === 'shoppingcart'" src="../../assets/images/tab-bars/data-confirm.png">
 				<img slot="icon" v-else src="../../assets/images/tab-bars/data.png">
-				消费记录
+				流量查询
 			</mt-tab-item>
 			<mt-tab-item id="mine" @click.native="goPath('mine')">
 				<img slot="icon" v-if="currentTabSelected === 'mine'" src="../../assets/images/tab-bars/my-confirm.png">

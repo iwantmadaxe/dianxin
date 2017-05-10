@@ -57,6 +57,7 @@
 			axios.get(apis.urls.flowCheck, {params: {card_id: this.id}})
 			.then((response) => {
 				this.data = apis.pures.pureQueryData(response.data.data);
+				this.data.rate = 100 - this.data.rate;
 				Indicator.close();
 			})
 			.catch((error) => {

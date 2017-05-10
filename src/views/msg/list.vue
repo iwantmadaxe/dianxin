@@ -62,7 +62,7 @@
 				});
 			},
 			read () {
-				axios.get(apis.urls.msgRead)
+				axios.put(apis.urls.msgRead)
 				.then((response) => {
 				})
 				.catch((error) => {
