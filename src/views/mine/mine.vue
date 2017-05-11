@@ -38,9 +38,9 @@
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
-		</div>
-		<div class="logout-row" @click="logout">
-			退出登录
+			<div class="logout-row" @click="logout">
+				退出登录
+			</div>
 		</div>
 		<!-- 底部栏 -->
 		<boss-bottom-pannel tab-selected="mine"></boss-bottom-pannel>
@@ -70,24 +70,16 @@
 			Indicator.open('加载中...');
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
-			let mineCache = readLocal('mine');
-			if (mineCache) {
-				this.mine = mineCache;
-				this.$nextTick(() => {
-					Indicator.close();
-				});
-			} else {
-				axios.get(apis.urls.userProfile)
-				.then((response) => {
-					this.mine = response.data.data;
-					saveLocal('mine', this.mine);
-					Indicator.close();
-				})
-				.catch((error) => {
-					Indicator.close();
-					apis.errors.errorPublic(error.response, this);
-				});
-			}
+			axios.get(apis.urls.userProfile)
+			.then((response) => {
+				this.mine = response.data.data;
+				saveLocal('mine', this.mine);
+				Indicator.close();
+			})
+			.catch((error) => {
+				Indicator.close();
+				apis.errors.errorPublic(error.response, this);
+			});
 		},
 		methods: {
 			goCert () {
