@@ -38,6 +38,13 @@
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
+			<div class="mine-list-row" @click="goPoint">
+				<i class="fa fa-star-o left-icon-fa"></i>
+				<div class="list-row-context">
+					<span class="title">我的积分</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
 			<div class="logout-row" @click="logout">
 				退出登录
 			</div>
@@ -99,6 +106,9 @@
 			},
 			goMsgCenter () {
 				this.$router.push({name: 'MsgCenter'});
+			},
+			goPoint () {
+				this.$router.push({name: 'MyPoint'});
 			},
 			logout () {
 				axios.get(apis.urls.logout)
@@ -196,7 +206,14 @@
 					@include border-bottom($color-gray);
 				}
 				.left-icon {
-				    width: auto;
+				    width: 14px;
+				    display: block;
+				    margin: 0.16rem 0.1rem 0 0.1rem;
+				    height: 0.14rem;
+				}
+				.left-icon-fa {
+					font-size: 16px;
+					min-width: 14px;
 				    display: block;
 				    margin: 0.16rem 0.1rem 0 0.1rem;
 				    height: 0.14rem;

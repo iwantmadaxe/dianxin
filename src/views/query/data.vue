@@ -1,26 +1,31 @@
 <template>
 	<div class="query-data">
-		<div v-show="item.choose" class="choose-icon">
-		</div>
-		<div class="title">
-			{{item.name}}卡号：{{data.card_number}}
-		</div>
-		<div class="context cl-fx">
-			<span class="last">剩余 {{data.remained}}MB</span>
-			<span class="total">总量 {{data.total}}MB</span>
-		</div>
-		<div class="context cl-fx">
-			<div class="progess">
-				<mt-progress :value="data.rate" :barHeight="8">
-<!-- 				  <div slot="start">0%</div>
-				  <div slot="end">100%</div> -->
-				</mt-progress>
+		<div class="query-data-con cl-fx">
+			<div v-show="item.choose" class="choose-icon">
 			</div>
+			<div class="title">
+				{{item.name}}卡号：{{data.card_number}}
+			</div>
+			<div class="context cl-fx">
+				<span class="last">剩余 {{data.remained}}MB</span>
+				<span class="total">总量 {{data.total}}MB</span>
+			</div>
+			<div class="context cl-fx">
+				<div class="progess">
+					<mt-progress :value="data.rate" :barHeight="8">
+	<!-- 				  <div slot="start">0%</div>
+					  <div slot="end">100%</div> -->
+					</mt-progress>
+				</div>
+			</div>
+		</div>
+		<div class="query-data-btn">
+			<mt-button size="large" type="primary" @click="goBuyFlow">购买流量</mt-button>
 		</div>
 	</div>
 </template>
 <script>
-	import { Progress, Indicator } from 'mint-ui';
+	import { Progress, Indicator, Button } from 'mint-ui';
 	import apis from '../../apis/index.js';
 	import axios from 'axios';
 	import { readLocal } from '../../utils/localstorage.js';
@@ -66,9 +71,15 @@
 				return false;
 			});
 		},
+		methods: {
+			goBuyFlow () {
+				this.$router.push({name: 'BuyFlow'});
+			}
+		},
 		components: {
 			[Progress.name]: Progress,
-			[Indicator.name]: Indicator
+			[Indicator.name]: Indicator,
+			[Button.name]: Button
 		}
 	};
 </script>
@@ -76,7 +87,13 @@
 	@import '../../assets/sass/partials/_var.scss';
 	@import '../../assets/sass/partials/_border.scss';
 
-	.query-data {
+	.query-data  .query-data-btn .mint-button {
+		border-radius: 0.2rem;
+		width: 80%;
+		margin: 0.3rem auto;
+	}
+
+	.query-data .query-data-con {
 		width: 90%;
 		margin: 0.1rem auto 0;
 	    background: $color-white;

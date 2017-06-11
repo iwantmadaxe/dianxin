@@ -49,6 +49,8 @@
 	import { Swipe, SwipeItem } from 'mint-ui';
 	// import apis from '../../apis/index.js';
 	// import axios from 'axios';
+	import { getCookie } from '../../utils/cookie.js';
+	import { saveLocal } from '../../utils/localstorage.js';
 
 	export default {
 		name: 'dx-index',
@@ -61,6 +63,14 @@
 			let _this = this;
 			// document.background.color = '#e9ecf5';
 			_this.bannerHeight = document.body.clientWidth / 320 * 130 + 'px';
+			let token = getCookie('token');
+			if (token) {
+				let tokenData = {
+					token: token
+				};
+				console.log(tokenData);
+				saveLocal('user', tokenData);
+			}
 		},
 		methods: {
 			goServiceDetail (id) {

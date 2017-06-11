@@ -160,9 +160,10 @@
 					});
 					_this.valid = {msg: '', ok: true};
 					return false;
-				}, (response) => {
+				})
+				.catch((error) => {
 					dropTime(setTime);
-					apis.errors(response, _this);
+					apis.errors.errorPublic(error.response, this);
 					return false;
 				});
 			},

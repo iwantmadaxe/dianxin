@@ -5,7 +5,10 @@ $color-black: #000;
 $color-text: #333;
 $color-gray: #a9abab;
 $color-gray-dx: #8691a6;
+$color-light-gray-bg: #f5f5f5;
 $color-yellow: #ef8a01;
+$color-orange: #fb4a10;
+$color-light-orange: #fb7410;
 $color-red: #c91425;
 $color-context-title: #969696;
 $color-context-active: #c91425;
@@ -75,6 +78,7 @@ $limit-color: #ef7979;
 $connect-color: #0068b7;
 
 /* Font Size */
+$huge-unit: 0.2rem;
 $page-title: 0.16rem;
 $square-title: 0.14rem;
 $normal-text: 0.12rem;

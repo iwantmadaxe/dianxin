@@ -5,11 +5,17 @@
 </template>
 
 <script>
+import { getCookie } from './utils/cookie.js';
+
 export default {
 	computed: {
 		visible () {
 			return ['/', '/header', '/search'].indexOf(this.$route.path) < 0;
 		}
+	},
+	created () {
+		let id = getCookie('openid');
+		console.log(id);
 	}
 };
 </script>
