@@ -160,13 +160,13 @@
 				if (!requiredMe(_this.imgFront)) {
 					_this.valid.msg = '身份证正面必传！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写手机号！', '提示');
+					MessageBox.alert('请上传身份证正面！', '提示');
 					return false;
 				}
 				if (!requiredMe(_this.imgBack)) {
 					_this.valid.msg = '身份证反面必传！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写手机号！', '提示');
+					MessageBox.alert('请上传身份证反面！', '提示');
 					return false;
 				}
 				if (_this.isCert) {
@@ -190,7 +190,7 @@
 				})
 				.catch((error) => {
 					this.isCert = false;
-					apis.errors.errorLogin(error.response, this);
+					apis.errors.errorPublic(error.response, this);
 				});
 			}
 		},
