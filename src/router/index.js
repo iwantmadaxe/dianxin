@@ -25,11 +25,11 @@ import QueryDataChoose from '../views/query/dataChoose.vue'; // 选择查询流�
 import PackageListChoose from '../views/package/listChoose.vue'; // 选择套餐列表页面
 import BuyFlow from '../views/buy/flow.vue'; // 订购流量页面
 import BuyPost from '../views/buy/post.vue'; // 在线购买页面
-import MyPoint from '../views/mine/point.vue'; // 我的积分页面
+// import MyPoint from '../views/mine/point.vue'; // 我的积分页面
 import Binding from '../views/binding/index.vue'; // 绑定页面
-import WithdrawCash from '../views/point/cash.vue'; // 积分提现页面
-import PointList from '../views/point/list.vue'; // 积分提现页面
-import PointExchange from '../views/point/exchange.vue'; // 积分兑换页面
+// import WithdrawCash from '../views/point/cash.vue'; // 积分提现页面
+// import PointList from '../views/point/list.vue'; // 积分提现页面
+// import PointExchange from '../views/point/exchange.vue'; // 积分兑换页面
 
 Vue.use(Router);
 
@@ -252,38 +252,38 @@ export default new Router({
 				title: '在线购买'
 			}
 		},
-		{
-			path: '/my-point',
-			name: 'MyPoint',
-			component: MyPoint,
-			meta: {
-				title: '我的积分'
-			}
-		},
-		{
-			path: '/point/cash',
-			name: 'WithdrawCash',
-			component: WithdrawCash,
-			meta: {
-				title: '积分提现'
-			}
-		},
-		{
-			path: '/point/list',
-			name: 'PointList',
-			component: PointList,
-			meta: {
-				title: '积分明细'
-			}
-		},
-		{
-			path: '/point/exchange',
-			name: 'PointExchange',
-			component: PointExchange,
-			meta: {
-				title: '积分兑换'
-			}
-		},
+		// {
+		// 	path: '/my-point',
+		// 	name: 'MyPoint',
+		// 	component: MyPoint,
+		// 	meta: {
+		// 		title: '我的积分'
+		// 	}
+		// },
+		// {
+		// 	path: '/point/cash',
+		// 	name: 'WithdrawCash',
+		// 	component: WithdrawCash,
+		// 	meta: {
+		// 		title: '积分提现'
+		// 	}
+		// },
+		// {
+		// 	path: '/point/list',
+		// 	name: 'PointList',
+		// 	component: PointList,
+		// 	meta: {
+		// 		title: '积分明细'
+		// 	}
+		// },
+		// {
+		// 	path: '/point/exchange',
+		// 	name: 'PointExchange',
+		// 	component: PointExchange,
+		// 	meta: {
+		// 		title: '积分兑换'
+		// 	}
+		// },
 		{
 			path: '*',
 			redirect: {

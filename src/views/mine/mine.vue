@@ -38,13 +38,13 @@
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
-			<div class="mine-list-row" @click="goPoint">
+<!-- 			<div class="mine-list-row" @click="goPoint">
 				<i class="fa fa-star-o left-icon-fa"></i>
 				<div class="list-row-context">
 					<span class="title">我的积分</span>
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
-			</div>
+			</div> -->
 			<div class="logout-row" @click="logout">
 				退出登录
 			</div>
