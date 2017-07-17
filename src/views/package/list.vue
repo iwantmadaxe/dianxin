@@ -59,7 +59,7 @@
 				// 获取套餐列表
 				Indicator.open('加载中...');
 				this.loading = true;
-				axios.get(apis.urls.flow)
+				axios.get(apis.urls.flow, {params: {code: this.cardId}})
 				.then((response) => {
 					Indicator.close();
 					this.list = apis.pures.purePackageList(response.data.data);
