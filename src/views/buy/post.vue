@@ -4,33 +4,41 @@
 			<div class="context cl-fx">
 				<div class="head-left cl-fx">
 					<p class="detail cl-fx">
-					<span class="text">20.00</span>
+					<span class="text">{{card.price}}</span>
 					<span class="unit">元</span><span class="area">全国</span></p>
 					<p class="mark">免邮费</p>
 				</div>
 				<div class="head-right cl-fx">
-					<k-number v-model:value="data.num"></k-number>
+					<k-number v-model:value="data.num" :min="1" :max="5"></k-number>
 				</div>
 			</div>
 			<div class="post-field-con">
 				<div class="mt-field-con">
-					<mt-field label="收件人：" type="text" v-model="data.name"></mt-field>
+					<p class="topic">收货人：&nbsp;&nbsp;{{data.name?data.name:'暂无'}}</p>
 				</div>
 				<div class="mt-field-con">
-					<mt-field label="手机号：" type="text" v-model="data.phone"></mt-field>
+					<p class="topic">联系方式：&nbsp;&nbsp;{{data.phone?data.phone:'暂无'}}</p>
 				</div>
 				<div class="mt-field-con">
-					<mt-field label="地址：" type="text" v-model="data.area"></mt-field>
+					<p class="topic">选择地址：&nbsp;&nbsp;{{data.address?data.address:'暂无'}}</p>
+				</div>
+				<div class="mt-field-con">
+					<div class="no-more" v-show="addressList.length === 0">
+						暂无收货地址
+					</div>
+				</div>
+				<div class="mt-field-con">
+					<span class="add-address" @click="goChooseAddress">选择收货地址</span>
 				</div>
 			</div>
 		</div>
 		<div class="buy-post-btn">
-			<mt-button size="large" type="primary" @click="">立刻购买</mt-button>
+			<mt-button size="large" type="primary" @click="buyCard">立刻购买</mt-button>
 		</div>
 	</div>
 </template>
 <script>
-	import { Progress, Indicator, Button, Field } from 'mint-ui';
+	import { Progress, Indicator, Button, Field, MessageBox } from 'mint-ui';
 	import apis from '../../apis/index.js';
 	import axios from 'axios';
 	import { readLocal } from '../../utils/localstorage.js';
@@ -43,10 +51,16 @@
 				token: '',
 				data: {
 					name: '',
-					phone: '',
-					area: '',
+					address: '',
+					addressId: '',
+					recommendId: '',
 					num: 1
-				}
+				},
+				card: {
+					id: '',
+					price: ''
+				},
+				addressList: []
 			};
 		},
 		created () {
@@ -54,6 +68,29 @@
 			Indicator.open('加载中...');
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
+			this.data.recommendId = this.$route.query.recommend;
+			if (this.$route.query.num) {
+				this.data.num = parseInt(this.$route.query.num);
+			}
+			if (this.$route.query.address) {
+				this.data.addressId = this.$route.query.address;
+				this.getAddressList(this.data.addressId);
+			} else {
+				axios.get(apis.urls.defaultAddress)
+				.then((response) => {
+					if (response.data !== '') {
+						this.data.address = response.data.data.area[0].name + ' ' + response.data.data.area[1].name + ' ' + response.data.data.area[2].name + ' ' + response.data.data.address;
+						this.data.name = response.data.data.receiver;
+						this.data.phone = response.data.data.contact;
+					}
+					this.data.addressId = response.data.data.id;
+				})
+				.catch((error) => {
+					apis.errors.errorPublic(error.response, this);
+					return false;
+				});
+				this.getAddressList();
+			}
 			axios.get(apis.urls.userProfile)
 			.then((response) => {
 				Indicator.close();
@@ -63,15 +100,79 @@
 				apis.errors.errorPublic(error.response, this);
 				return false;
 			});
+			axios.get(apis.urls.getPackageDetail)
+			.then((response) => {
+				this.card.price = response.data.data.price;
+				this.card.id = response.data.data.id;
+			})
+			.catch((error) => {
+				apis.errors.errorPublic(error.response, this);
+				return false;
+			});
 		},
 		methods: {
+			getAddressList (id) {
+				let _this = this;
+				axios.get(apis.urls.getAddressList)
+				.then((response) => {
+					_this.addressList = response.data.data;
+					if (id) {
+						_this.addressList.map(function (item) {
+							if (parseInt(item.id) === parseInt(id)) {
+								_this.data.name = item.receiver;
+								_this.data.phone = item.contact;
+								_this.data.address = item.area[0].name + ' ' + item.area[1].name + ' ' + item.area[2].name + ' ' + item.address;
+							}
+						});
+					}
+					// this.addressList = response.data.data.map(function (item) {
+					// 	item.label = item.area[0].name + ' ' + item.area[1].name + ' ' + item.area[2].name + ' ' + item.address;
+					// 	return item;
+					// });
+				})
+				.catch((error) => {
+					apis.errors.errorPublic(error.response, this);
+					return false;
+				});
+			},
+			goChooseAddress () {
+				this.$router.push({name: 'AddressChoose', query: {recommend: this.data.recommendId, num: this.data.num}});
+			},
+			chooseAddress (item) {
+				this.data.address = item.label;
+				this.data.name = item.receiver;
+				this.data.phone = item.contact;
+			},
+			buyCard () {
+				if (this.data.num <= 0) {
+					MessageBox.alert('购买数量必须大于零！', '提示');
+					return false;
+				}
+				let tpl = {
+					amount: this.data.num,  //  正整数，小于等于5
+					recommend: this.data.recommendId,  //  不必填
+					address: this.data.addressId
+				};
+				axios.post(apis.urls.buyCard + '/' + this.card.id, tpl)
+				.then((response) => {
+					this.addressList = response.data.data.map(function (item) {
+						item.label = item.area[0].name + ' ' + item.area[1].name + ' ' + item.area[2].name + ' ' + item.address;
+						return item;
+					});
+				})
+				.catch((error) => {
+					apis.errors.errorPublic(error.response, this);
+					return false;
+				});
+			}
 		},
 		components: {
 			[Progress.name]: Progress,
 			[Indicator.name]: Indicator,
 			[Field.name]: Field,
 			[Button.name]: Button,
-			[KNumber.name]: KNumber
+			[KNumber.name]: KNumber,
+			[MessageBox.name]: MessageBox
 		}
 	};
 </script>
@@ -80,6 +181,51 @@
 	@import '../../assets/sass/partials/_border.scss';
 
 	.buy-post {
+		.no-more {
+			font-size: $page-title;
+		}
+		.address-list-ul {
+			height: 102px;
+			overflow-y: auto;
+			li {
+				height: auto;
+				line-height: 24px;
+				font-size: $page-title;
+				width: 100%;
+				padding: 10px 5%;
+				text-align: left;
+				border-bottom: 1px solid $color-gray;
+				.choose {
+					float: right;
+					margin-right: 10px;
+				    color: $color-blue;
+				}
+				.edit {
+					float: right;
+				    color: $color-blue;
+				}
+			}
+		}
+		.add-address {
+		    height: 0.45rem;
+			line-height: 0.45rem;
+			font-size: 0.16rem;
+			color: $color-blue;
+			margin-top: 0.2rem;
+			background: #fff;
+		}
+		.topic {
+			font-size: 15px;
+			height: auto;
+			line-height: 48px;
+			text-align: left;
+			width: 90%;
+			margin: 0 auto;
+		}
+		.picker-items {
+			height: 108px;
+			overflow: hidden;
+		}
 		.post-field-con {
 			padding: 0.2rem 0 1.2rem;
 			background-image: url('../../assets/images/flow/bg.png');

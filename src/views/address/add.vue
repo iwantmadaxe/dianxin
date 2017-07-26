@@ -1,11 +1,11 @@
 <template>
-	<div class="dx-mine-info input-field-con cl-fx">
+	<div class="address-add input-field-con cl-fx">
 		<div class="content common-navbar">
 			<div class="mt-field-con">
-				<mt-field placeholder="请输入姓名" type="text" v-model="name"></mt-field>
+				<mt-field placeholder="请输入收货人姓名" type="text" v-model="receiver"></mt-field>
 			</div>
 			<div class="mt-field-con">
-				<mt-field placeholder="请输入邮箱" type="text" v-model="mail"></mt-field>
+				<mt-field placeholder="请输入联系方式" type="text" v-model="contact"></mt-field>
 			</div>
 		</div>
 		<div class="operate cl-fx">
@@ -41,7 +41,7 @@
 </template>
 <script type="text/javascript">
 	import { Field, Button, MessageBox, Toast, Indicator } from 'mint-ui';
-	import { requiredMe, email } from '../../utils/valids.js';
+	import { requiredMe } from '../../utils/valids.js';
 	import apis from '../../apis/index.js';
 	import axios from 'axios';
 	import { mapActions } from 'vuex';
@@ -49,12 +49,12 @@
 	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
-		name: 'dx-register',
+		name: 'address-add',
 		data () {
 			return {
 				token: '',
-				name: '',
-				mail: '',
+				receiver: '',
+				contact: '',
 				addressDetail: '',
 				valid: {
 					msg: '',
@@ -92,7 +92,7 @@
 			};
 		},
 		created () {
-			this.fetchData();
+			// this.fetchData();
 		},
 		methods: {
 			...mapActions([
@@ -102,17 +102,17 @@
 				Indicator.open('加载中...');
 				this.token = 'bearer ' + readLocal('user').token;
 				axios.defaults.headers.common['Authorization'] = this.token;
-				axios.get(apis.urls.userProfile)
+				axios.get(apis.urls.defaultAddress)
 				.then((response) => {
 					this.name = response.data.data.name;
-					this.mail = response.data.data.email;
+					this.contact = response.data.data.contact;
 					this.addressDetail = response.data.data.address;
 					this.address.defaultPath = response.data.data.area;
 					Indicator.close();
 				})
 				.catch((error) => {
 					Indicator.close();
-					apis.errors.errorLogin(error.response, this);
+					apis.errors.errorPublic(error.response, this);
 					return false;
 				});
 			},
@@ -130,22 +130,16 @@
 			postEdit () {
 				let _this = this;
 				// 数据验证
-				if (!requiredMe(_this.name)) {
-					_this.valid.msg = '请填写姓名！';
+				if (!requiredMe(_this.receiver)) {
+					_this.valid.msg = '请填写收货人姓名！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写姓名！', '提示');
+					MessageBox.alert('请填写收货人姓名！', '提示');
 					return false;
 				}
-				if (!requiredMe(_this.mail)) {
-					_this.valid.msg = '请填写邮箱！';
+				if (!requiredMe(_this.contact)) {
+					_this.valid.msg = '请填写联系方式！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写邮箱！', '提示');
-					return false;
-				}
-				if (!email(_this.mail)) {
-					_this.valid.msg = '邮箱格式错误！';
-					_this.valid.ok = false;
-					MessageBox.alert('邮箱格式错误！', '提示');
+					MessageBox.alert('请填写联系方式！', '提示');
 					return false;
 				}
 				if (!requiredMe(_this.address.defaultPath.district.code)) {
@@ -163,22 +157,22 @@
 				// 发送请求
 				// 组织发送请求参数
 				let postTpl = {
-					name: _this.name,
-					email: _this.mail,
-					areaCode: _this.address.defaultPath.district.code,
+					receiver: _this.receiver,
+					contact: _this.contact,
+					area: _this.address.defaultPath.district.code,
 					address: _this.addressDetail
 				};
-				axios.put(apis.urls.userProfileEdit, postTpl)
+				axios.post(apis.urls.createAddress, postTpl)
 				.then((response) => {
 					// 提示成功并返回登录
 					Toast({
-						message: '保存成功！',
+						message: '添加地址成功！',
 						iconClass: 'mintui mintui-success'
 					});
-					_this.$router.push({name: 'Mine'});
+					window.history.go(-1);
 				})
 				.catch((error) => {
-					apis.errors.errorPublic(error.response, _this);
+					apis.errors.errorPublic(error.response, this);
 					return false;
 				});
 			}
@@ -195,10 +189,10 @@
 	@import '../../assets/sass/partials/_var.scss';
 	@import '../../assets/sass/partials/_border.scss';
 
-	.dx-mine-info .mint-field-core {
+	.address-add .mint-field-core {
 	    padding: 0.1rem 0.2rem;
 	}
-	.dx-mine-info .operate {
+	.address-add .operate {
 		width: 100%;
 	    margin: 0.35rem 0 0;
 	    .operate-row {
@@ -260,7 +254,7 @@
 		}
 	}
 
-	.dx-mine-info .register-textarea {
+	.address-add .register-textarea {
 		width: 80%;
 		margin: 0.15rem auto 0;
 		textarea {

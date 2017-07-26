@@ -1,11 +1,14 @@
 <template>
 	<div class="mine">
-		<div class="company-achievement" @click="goMineInfo">
+		<div class="company-achievement">
 			<div class="topic-row">
 				<img class="topic-icon" src="../../assets/images/mine/default-avatar.png">
 				<div class="topic-text-con cl-fx">
-					<p class="topic-text">{{mine.name?mine.name:'暂无'}}</p>
-					<p class="topic-text-small">修改个人资料</p>
+					<p class="topic-text cl-fx">{{mine.name?mine.name:'暂无'}}  </p>
+					<p class="topic-text-small cl-fx">
+						<span class="point">积分： {{mine.points}}</span>
+						<span class="edit" @click="goMineInfoEdit">修改个人资料</span>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -32,9 +35,23 @@
 				</div>
 			</div>
 			<div class="mine-list-row" @click="goCert">
-				<img class="left-icon" src="../../assets/images/login/msg.png">
+				<i class="fa fa-certificate left-icon-fa"></i>
 				<div class="list-row-context">
 					<span class="title">实名认证</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
+			<div class="mine-list-row" @click="goAddressList">
+				<i class="fa fa-address-book left-icon-fa"></i>
+				<div class="list-row-context">
+					<span class="title">我的收货地址</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
+			<div class="mine-list-row" @click="goMineQrcode">
+				<i class="fa fa-qrcode left-icon-fa"></i>
+				<div class="list-row-context">
+					<span class="title">我的二维码</span>
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
@@ -95,20 +112,23 @@
 			goEditPhone () {
 				this.$router.push({name: 'EditPhone'});
 			},
-			goMineInfo () {
-				this.$router.push({name: 'MineInfo'});
+			goMineInfoEdit () {
+				this.$router.push({name: 'MineInfoEdit'});
 			},
 			goEditPassword () {
 				this.$router.push({name: 'EditPassword'});
 			},
-			goMineInfoEdit () {
-				this.$router.push({name: 'MineInfoEdit'});
+			goMineQrcode () {
+				this.$router.push({name: 'MineQrcode', query: {img: this.mine.qrcode}});
 			},
 			goMsgCenter () {
 				this.$router.push({name: 'MsgCenter'});
 			},
 			goPoint () {
 				this.$router.push({name: 'MyPoint'});
+			},
+			goAddressList () {
+				this.$router.push({name: 'AddressList'});
 			},
 			logout () {
 				axios.get(apis.urls.logout)
@@ -137,6 +157,9 @@
 	@import '../../assets/sass/partials/_border.scss';
 
 	.mine {
+		.fa {
+			color: #8691a6;
+		}
 		.company-achievement {
 			background: $color-white;
 			.topic-row {
@@ -165,7 +188,7 @@
 						font-size: $page-title;
 						color: $color-text;
 						text-align: left;
-						margin-left: 0.15rem;
+						padding-left: 0.15rem;
 						display: block;
 						width: 100%;
 						margin-top: 0.1rem;
@@ -174,9 +197,15 @@
 						font-size: $normal-text;
 						color: $color-gray-dx;
 						text-align: left;
-						margin-left: 0.15rem;
+						padding-left: 0.15rem;
 						display: block;
 						width: 100%;
+						.point {
+							float: left;
+						}
+						.edit {
+							float: right;
+						}
 					}
 				}
 			}
@@ -208,14 +237,14 @@
 				.left-icon {
 				    width: 14px;
 				    display: block;
-				    margin: 0.16rem 0.1rem 0 0.1rem;
+				    margin: 0.15rem 0.1rem 0 0.1rem;
 				    height: 0.14rem;
 				}
 				.left-icon-fa {
 					font-size: 16px;
 					min-width: 14px;
 				    display: block;
-				    margin: 0.16rem 0.1rem 0 0.1rem;
+				    margin: 0.15rem 0.1rem 0 0.1rem;
 				    height: 0.14rem;
 				}
 				.list-row-context {

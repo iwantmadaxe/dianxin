@@ -1,11 +1,11 @@
 <template>
-	<div class="mine-info-edit input-field-con cl-fx">
+	<div class="address-edit input-field-con cl-fx">
 		<div class="content common-navbar">
 			<div class="mt-field-con">
-				<mt-field placeholder="请输入姓名" type="text" v-model="name"></mt-field>
+				<mt-field placeholder="请输入收货人姓名" type="text" v-model="receiver"></mt-field>
 			</div>
 			<div class="mt-field-con">
-				<mt-field placeholder="请输入邮箱" type="text" v-model="mail"></mt-field>
+				<mt-field placeholder="请输入联系方式" type="text" v-model="contact"></mt-field>
 			</div>
 		</div>
 		<div class="operate cl-fx">
@@ -41,7 +41,7 @@
 </template>
 <script type="text/javascript">
 	import { Field, Button, MessageBox, Toast, Indicator } from 'mint-ui';
-	import { requiredMe, email } from '../../utils/valids.js';
+	import { requiredMe } from '../../utils/valids.js';
 	import apis from '../../apis/index.js';
 	import axios from 'axios';
 	import { mapActions } from 'vuex';
@@ -49,12 +49,13 @@
 	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
-		name: 'mine-info-edit',
+		name: 'address-edit',
 		data () {
 			return {
+				id: '',
 				token: '',
-				name: '',
-				mail: '',
+				receiver: '',
+				contact: '',
 				addressDetail: '',
 				valid: {
 					msg: '',
@@ -101,13 +102,16 @@
 			fetchData () {
 				Indicator.open('加载中...');
 				this.token = 'bearer ' + readLocal('user').token;
+				this.id = this.$route.params.id;
 				axios.defaults.headers.common['Authorization'] = this.token;
-				axios.get(apis.urls.userProfile)
+				axios.get(apis.urls.getSingleAddress + '/' + this.id + '/edit')
 				.then((response) => {
-					this.name = response.data.data.name;
-					this.mail = response.data.data.email;
+					this.receiver = response.data.data.receiver;
+					this.contact = response.data.data.contact;
 					this.addressDetail = response.data.data.address;
-					this.address.defaultPath = response.data.data.area;
+					this.address.defaultPath.province = response.data.data.area[0];
+					this.address.defaultPath.city = response.data.data.area[1];
+					this.address.defaultPath.district = response.data.data.area[2];
 					Indicator.close();
 				})
 				.catch((error) => {
@@ -130,22 +134,16 @@
 			postEdit () {
 				let _this = this;
 				// 数据验证
-				if (!requiredMe(_this.name)) {
-					_this.valid.msg = '请填写姓名！';
+				if (!requiredMe(_this.receiver)) {
+					_this.valid.msg = '请填写收货人姓名！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写姓名！', '提示');
+					MessageBox.alert('请填写收货人姓名！', '提示');
 					return false;
 				}
-				if (!requiredMe(_this.mail)) {
-					_this.valid.msg = '请填写邮箱！';
+				if (!requiredMe(_this.contact)) {
+					_this.valid.msg = '请填写联系方式！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写邮箱！', '提示');
-					return false;
-				}
-				if (!email(_this.mail)) {
-					_this.valid.msg = '邮箱格式错误！';
-					_this.valid.ok = false;
-					MessageBox.alert('邮箱格式错误！', '提示');
+					MessageBox.alert('请填写联系方式！', '提示');
 					return false;
 				}
 				if (!requiredMe(_this.address.defaultPath.district.code)) {
@@ -163,19 +161,19 @@
 				// 发送请求
 				// 组织发送请求参数
 				let postTpl = {
-					name: _this.name,
-					email: _this.mail,
-					areaCode: _this.address.defaultPath.district.code,
+					receiver: _this.receiver,
+					contact: _this.contact,
+					area: _this.address.defaultPath.district.code,
 					address: _this.addressDetail
 				};
-				axios.put(apis.urls.userProfileEdit, postTpl)
+				axios.post(apis.urls.getSingleAddress + '/' + this.id + '/update', postTpl)
 				.then((response) => {
 					// 提示成功并返回登录
 					Toast({
-						message: '保存成功！',
+						message: '更新地址成功！',
 						iconClass: 'mintui mintui-success'
 					});
-					_this.$router.push({name: 'Mine'});
+					window.history.go(-1);
 				})
 				.catch((error) => {
 					apis.errors.errorPublic(error.response, _this);
@@ -195,10 +193,10 @@
 	@import '../../assets/sass/partials/_var.scss';
 	@import '../../assets/sass/partials/_border.scss';
 
-	.mine-info-edit .mint-field-core {
+	.address-edit .mint-field-core {
 	    padding: 0.1rem 0.2rem;
 	}
-	.mine-info-edit .operate {
+	.address-edit .operate {
 		width: 100%;
 	    margin: 0.35rem 0 0;
 	    .operate-row {
@@ -260,7 +258,7 @@
 		}
 	}
 
-	.mine-info-edit .register-textarea {
+	.address-edit .register-textarea {
 		width: 80%;
 		margin: 0.15rem auto 0;
 		textarea {

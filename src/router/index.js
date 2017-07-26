@@ -6,7 +6,7 @@ import Forget from '../views/login/forget.vue'; // 忘记密码页面
 import Index from '../views/index/index.vue'; // 首页
 import Search from '../views/search/index.vue'; // 搜索
 import Mine from '../views/mine/mine.vue'; // 我的页面
-import MineInfo from '../views/mine/mine-info.vue'; // 个人信息页面
+import MineQrcode from '../views/mine/mine-qrcode.vue'; // 我的二维码页面
 import MineInfoEdit from '../views/mine/mine-info-edit.vue'; // 个人信息修改页面
 import PackageList from '../views/package/list.vue'; // 套餐列表页面
 import QueryData from '../views/query/data.vue'; // 查询流量页面
@@ -30,6 +30,10 @@ import Binding from '../views/binding/index.vue'; // 绑定页面
 // import WithdrawCash from '../views/point/cash.vue'; // 积分提现页面
 // import PointList from '../views/point/list.vue'; // 积分提现页面
 // import PointExchange from '../views/point/exchange.vue'; // 积分兑换页面
+import AddAddress from '../views/address/add.vue'; // 添加地址页面
+import EditAddress from '../views/address/edit.vue'; // 编辑地址页面
+import AddressList from '../views/address/list.vue'; // 地址列表页面
+import AddressChoose from '../views/address/choose.vue'; // 选择地址页面
 
 Vue.use(Router);
 
@@ -141,11 +145,14 @@ export default new Router({
 			}
 		},
 		{
-			path: '/mine/info',
-			name: 'MineInfo',
-			component: MineInfo,
+			path: '/mine/qrcode',
+			name: 'MineQrcode',
+			query: {
+				img: null
+			},
+			component: MineQrcode,
 			meta: {
-				title: '个人信息'
+				title: '我的二维码'
 			}
 		},
 		{
@@ -247,9 +254,50 @@ export default new Router({
 		{
 			path: '/buy-post',
 			name: 'BuyPost',
+			query: {
+				recommend: null,
+				address: null,
+				num: null
+			},
 			component: BuyPost,
 			meta: {
 				title: '在线购买'
+			}
+		},
+		{
+			path: '/address/choose',
+			name: 'AddressChoose',
+			query: {
+				recommend: null,
+				num: null
+			},
+			component: AddressChoose,
+			meta: {
+				title: '选择地址'
+			}
+		},
+		{
+			path: '/address/add',
+			name: 'AddAddress',
+			component: AddAddress,
+			meta: {
+				title: '添加地址'
+			}
+		},
+		{
+			path: '/address/edit/:id',
+			name: 'EditAddress',
+			component: EditAddress,
+			meta: {
+				title: '编辑地址'
+			}
+		},
+		{
+			path: '/address/list',
+			name: 'AddressList',
+			component: AddressList,
+			meta: {
+				title: '地址列表'
 			}
 		},
 		// {

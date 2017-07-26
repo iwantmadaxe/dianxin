@@ -17,7 +17,14 @@ const apiRoutes = {
 	cardsList: 'user/cards',  //  卡列表
 	postOrder: 'package',  //  下订单
 	msgList: 'user/messages',  //  信息列表
-	msgRead: 'user/message/read'  //  信息已读（全部）
+	msgRead: 'user/message/read',  //  信息已读（全部）
+	getAddressList: 'delivery/address',  //  收货地址列表
+	createAddress: 'delivery/address/create',  //  创建收货地址
+	getSingleAddress: 'delivery/address',  //  对某个id的收货地址操作
+	defaultAddress: 'delivery/address/default',  //  获取默认地址
+	getPackageDetail: 'card/packages',  //  购卡的套餐
+	buyCard: 'card/packages',  //  购卡下单接口 接受一个参数address，必填项
+	getQrcode: 'user/qrcode'  //  参数url必填，是发起申请的当前url
 };
 
 export default apiRoutes;
