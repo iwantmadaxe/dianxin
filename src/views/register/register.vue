@@ -1,16 +1,18 @@
 <template>
 	<div class="register input-field-con cl-fx">
 		<div class="content common-navbar">
-			<div class="bg-card mt-field-con">
-				<mt-field placeholder="请输入卡号" type="text" v-model="cardNum"></mt-field>
+			<div class="bg-user mt-field-con">
+				<mt-field placeholder="请输入姓名" type="text" v-model="name">
+				</mt-field>
 			</div>
 			<div class="bg-phone mt-field-con">
-				<mt-field placeholder="请输入手机号" type="text" v-model="phone"></mt-field>
+				<mt-field placeholder="请输入手机号" type="text" v-model="phone">
+					<mt-button type="primary" v-if="downTime.time" disabled>重新发送({{ downTime.time }})</mt-button>
+					<mt-button type="primary" @click="sendSms" v-else>获取验证码</mt-button>
+				</mt-field>
 			</div>
 			<div class="bg-sms mt-field-con">
 				<mt-field placeholder="请输入验证码" type="text" v-model="code">
-					<mt-button type="primary" v-if="downTime.time" disabled>重新发送({{ downTime.time }})</mt-button>
-					<mt-button type="primary" @click="sendSms" v-else>获取验证码</mt-button>
 				</mt-field>
 			</div>
 			<div class="bg-password mt-field-con">
@@ -66,7 +68,7 @@
 				phone: '',
 				pass: '',
 				code: '',
-				cardNum: '',
+				name: '',
 				addressDetail: '',
 				valid: {
 					msg: '',
@@ -167,17 +169,24 @@
 					return false;
 				});
 			},
+			registerRedict () {
+				if (this.$route.query.redict) {
+					window.location.href = this.$route.query.redict;
+				} else {
+					this.$router.push({name: 'Index'});
+				}
+			},
 			register () {
 				let _this = this;
 				// 数据验证
 				_this.valid = {msg: '', ok: true};
-				if (!requiredMe(_this.cardNum)) {
-					_this.valid.msg = '卡号必填！';
+				// 验证各个所填参数必填
+				if (!requiredMe(_this.name)) {
+					_this.valid.msg = '姓名必填！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写卡号！', '提示');
+					MessageBox.alert('请填写姓名！', '提示');
 					return false;
 				}
-				// 验证各个所填参数必填
 				if (!requiredMe(_this.phone)) {
 					_this.valid.msg = '手机号必填！';
 					_this.valid.ok = false;
@@ -218,7 +227,7 @@
 				// 发送请求
 				// 组织发送请求参数
 				let postTpl = {
-					cardNum: _this.cardNum,
+					name: _this.name,
 					phone: parseInt(_this.phone),
 					password: _this.pass,
 					smsCode: parseInt(_this.code),
@@ -238,7 +247,7 @@
 					let loginTpl = apis.pures.pureLogin(response.data.data);
 					saveLocal('user', loginTpl);
 					_this.goLogin(loginTpl);
-					_this.$router.push({name: 'Index'});
+					_this.registerRedict();
 				})
 				.catch((error) => {
 					apis.errors.errorLogin(error.response, _this);

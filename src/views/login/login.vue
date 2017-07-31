@@ -14,7 +14,7 @@
 			<mt-tab-container-item id="local-login">
 				<div class="content">
 					<div class="bg-phone mt-field-con">
-						<mt-field placeholder="请输入手机号/卡号" type="text" v-model="phone"></mt-field>
+						<mt-field placeholder="请输入手机号" type="text" v-model="phone"></mt-field>
 					</div>
 					<div class="bg-password mt-field-con">
 						<mt-field placeholder="请输入密码" type="password" v-model="pass"></mt-field>
@@ -61,7 +61,7 @@
 	import { requiredMe, phone } from '../../utils/valids.js';
 	import apis from '../../apis/index.js';
 	import axios from 'axios';
-	import { saveLocal } from '../../utils/localstorage.js';
+	import { saveLocal, readLocal } from '../../utils/localstorage.js';
 	import { mapActions } from 'vuex';
 
 	export default {
@@ -82,7 +82,7 @@
 			};
 		},
 		created () {
-			let hasAuth = this.getCookie('token');
+			let hasAuth = readLocal('user').token;
 			if (hasAuth) {
 				this.$router.push({name: 'Index'});
 			}
@@ -91,6 +91,13 @@
 			...mapActions([
 				'goLogin'
 			]),
+			loginRedict () {
+				if (this.$route.query.redict) {
+					window.location.href = this.$route.query.redict;
+				} else {
+					this.$router.push({name: 'Index'});
+				}
+			},
 			sendSms () {
 				let _this = this;
 				// 数据验证
@@ -122,28 +129,6 @@
 					return false;
 				});
 			},
-			loginPostLocal (postTpl) {
-				let postTpl2 = {
-					cardNum: postTpl,
-					auth_name: 'card',
-					password: postTpl.password
-				};
-				axios.post(apis.urls.login, postTpl2)
-				.then((response) => {
-					Toast({
-						message: '登录成功！',
-						iconClass: 'mintui mintui-success'
-					});
-					// 储存信息
-					let loginTpl = apis.pures.pureLogin(response.data.data);
-					saveLocal('user', loginTpl);
-					this.goLogin(loginTpl);
-					this.$router.push({name: 'Index'});
-				})
-				.catch((error) => {
-					apis.errors.errorLogin(error.response, this);
-				});
-			},
 			loginPostPhone (postTpl) {
 				postTpl.auth_name = 'phone';
 				axios.post(apis.urls.login, postTpl)
@@ -156,7 +141,7 @@
 					let loginTpl = apis.pures.pureLogin(response.data.data);
 					saveLocal('user', loginTpl);
 					this.goLogin(loginTpl);
-					this.$router.push({name: 'Index'});
+					this.loginRedict();
 				})
 				.catch((error) => {
 					apis.errors.errorLogin(error.response, this);
@@ -174,7 +159,7 @@
 					let loginTpl = apis.pures.pureLogin(response.data.data);
 					saveLocal('user', loginTpl);
 					this.goLogin(loginTpl);
-					this.$router.push({name: 'Index'});
+					this.loginRedict();
 				})
 				.catch((error) => {
 					apis.errors.errorLogin(error.response, this);
@@ -220,9 +205,9 @@
 				_this.valid = {msg: '', ok: true};
 				// 验证各个所填参数必填
 				if (!requiredMe(_this.phone)) {
-					_this.valid.msg = '手机号/卡号必填！';
+					_this.valid.msg = '手机号必填！';
 					_this.valid.ok = false;
-					MessageBox.alert('请填写手机号/卡号！', '提示');
+					MessageBox.alert('请填写手机号！', '提示');
 					return false;
 				}
 				if (!requiredMe(_this.pass)) {
@@ -237,11 +222,7 @@
 					smsCode: _this.code,
 					auth_name: ''
 				};
-				if (_this.phone.length !== 11) {
-					_this.loginPostLocal(postTpl);
-				} else {
-					_this.loginPostPhone(postTpl);
-				}
+				_this.loginPostPhone(postTpl);
 			},
 			getCookie (name) {
 				let reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
@@ -253,7 +234,8 @@
 				}
 			},
 			goLoginPage () {
-				this.$router.push({name: 'Register'});
+				let redict = this.$route.query.redict;
+				this.$router.push({name: 'Register', query: {redict: redict}});
 			},
 			goForgetPage () {
 				this.$router.push({name: 'Forget'});
@@ -400,6 +382,14 @@
 		    background-repeat: no-repeat;
     		background-position: 0.2rem center;
     		background-size: 0.12rem 0.14rem;
+		}
+	}
+	.bg-user {
+		.mint-field-core {
+			background-image: url('../../assets/images/login/user.png');
+		    background-repeat: no-repeat;
+		    background-position: 0.18rem center;
+    		background-size: 0.16rem 0.16rem;
 		}
 	}
 	.input-field-con .btn-register .mint-button {

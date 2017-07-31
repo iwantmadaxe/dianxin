@@ -12,6 +12,7 @@ import PackageList from '../views/package/list.vue'; // 套餐列表页面
 import QueryData from '../views/query/data.vue'; // 查询流量页面
 import RecordList from '../views/query/record-list.vue'; // 消费记录页面
 import EditPhone from '../views/edit/phone.vue'; // 修改手机号页面
+import BindPhone from '../views/edit/newPhone.vue'; // 绑定手机号页面
 import EditPassword from '../views/edit/password.vue'; // 修改密码页面
 import CertAdd from '../views/cert/certAdd.vue'; // 认证添加页面
 import CertWait from '../views/cert/certWait.vue'; // 认证添加已提交页面
@@ -27,13 +28,16 @@ import BuyFlow from '../views/buy/flow.vue'; // 订购流量页面
 import BuyPost from '../views/buy/post.vue'; // 在线购买页面
 // import MyPoint from '../views/mine/point.vue'; // 我的积分页面
 import Binding from '../views/binding/index.vue'; // 绑定页面
-// import WithdrawCash from '../views/point/cash.vue'; // 积分提现页面
-// import PointList from '../views/point/list.vue'; // 积分提现页面
-// import PointExchange from '../views/point/exchange.vue'; // 积分兑换页面
+import WithdrawCash from '../views/point/cash.vue'; // 积分提现页面
+import PointExchange from '../views/point/exchange.vue'; // 积分兑换页面
+import PointExchangeList from '../views/point/exchangeList.vue'; // 积分兑换列表页面
 import AddAddress from '../views/address/add.vue'; // 添加地址页面
 import EditAddress from '../views/address/edit.vue'; // 编辑地址页面
 import AddressList from '../views/address/list.vue'; // 地址列表页面
 import AddressChoose from '../views/address/choose.vue'; // 选择地址页面
+import PointList from '../views/point/list.vue'; // 积分列表页面
+import CardList from '../views/card/list.vue'; // 卡列表页面
+import PointCenter from '../views/point/center.vue'; // 积分管理页面
 
 Vue.use(Router);
 
@@ -42,6 +46,9 @@ export default new Router({
 		{
 			path: '/register',
 			name: 'Register',
+			query: {
+				redict: null
+			},
 			component: Register,
 			meta: {
 				title: '注册'
@@ -50,6 +57,9 @@ export default new Router({
 		{
 			path: '/login',
 			name: 'Login',
+			query: {
+				redict: null
+			},
 			component: Login,
 			meta: {
 				title: '登陆'
@@ -164,6 +174,14 @@ export default new Router({
 			}
 		},
 		{
+			path: '/edit/newPhone',
+			name: 'BindPhone',
+			component: BindPhone,
+			meta: {
+				title: '绑定手机号'
+			}
+		},
+		{
 			path: '/edit/password',
 			name: 'EditPassword',
 			component: EditPassword,
@@ -177,6 +195,30 @@ export default new Router({
 			component: MineInfoEdit,
 			meta: {
 				title: '个人信息修改'
+			}
+		},
+		{
+			path: '/card/list',
+			name: 'CardList',
+			component: CardList,
+			meta: {
+				title: '卡列表'
+			}
+		},
+		{
+			path: '/point/center',
+			name: 'PointCenter',
+			component: PointCenter,
+			meta: {
+				title: '积分管理'
+			}
+		},
+		{
+			path: '/point/list',
+			name: 'PointList',
+			component: PointList,
+			meta: {
+				title: '积分列表'
 			}
 		},
 		{
@@ -308,30 +350,30 @@ export default new Router({
 		// 		title: '我的积分'
 		// 	}
 		// },
-		// {
-		// 	path: '/point/cash',
-		// 	name: 'WithdrawCash',
-		// 	component: WithdrawCash,
-		// 	meta: {
-		// 		title: '积分提现'
-		// 	}
-		// },
-		// {
-		// 	path: '/point/list',
-		// 	name: 'PointList',
-		// 	component: PointList,
-		// 	meta: {
-		// 		title: '积分明细'
-		// 	}
-		// },
-		// {
-		// 	path: '/point/exchange',
-		// 	name: 'PointExchange',
-		// 	component: PointExchange,
-		// 	meta: {
-		// 		title: '积分兑换'
-		// 	}
-		// },
+		{
+			path: '/point/cash',
+			name: 'WithdrawCash',
+			component: WithdrawCash,
+			meta: {
+				title: '积分提现'
+			}
+		},
+		{
+			path: '/point/exchange',
+			name: 'PointExchange',
+			component: PointExchange,
+			meta: {
+				title: '积分兑换'
+			}
+		},
+		{
+			path: '/point/exchange/list',
+			name: 'PointExchangeList',
+			component: PointExchangeList,
+			meta: {
+				title: '积分兑换列表'
+			}
+		},
 		{
 			path: '*',
 			redirect: {

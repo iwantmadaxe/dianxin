@@ -15,6 +15,7 @@ const apiRoutes = {
 	certPost: 'user/certificate',  //  实名认证
 	certList: 'user/certificates',  //  认证列表
 	cardsList: 'user/cards',  //  卡列表
+	editCardNick: 'card',  //  id是卡id, 接受参数是nick_name卡昵称
 	postOrder: 'package',  //  下订单
 	msgList: 'user/messages',  //  信息列表
 	msgRead: 'user/message/read',  //  信息已读（全部）
@@ -24,7 +25,12 @@ const apiRoutes = {
 	defaultAddress: 'delivery/address/default',  //  获取默认地址
 	getPackageDetail: 'card/packages',  //  购卡的套餐
 	buyCard: 'card/packages',  //  购卡下单接口 接受一个参数address，必填项
-	getQrcode: 'user/qrcode'  //  参数url必填，是发起申请的当前url
+	getQrcode: 'user/qrcode',  //  参数url必填，是发起申请的当前url
+	pointGetCash: 'points/drawing',  //  积分提现状况
+	pointRule: 'points/drawing/rule',  //  积分兑换规则
+	pointList: 'points',  //  积分记录列表
+	pointCountMoney: 'points/drawing/rate',  //  积分换算金额
+	pointCashApply: 'points/drawing/apply'  //  积分提现申请
 };
 
 export default apiRoutes;

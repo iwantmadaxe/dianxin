@@ -68,7 +68,6 @@
 				let tokenData = {
 					token: token
 				};
-				console.log(tokenData);
 				saveLocal('user', tokenData);
 			}
 		},

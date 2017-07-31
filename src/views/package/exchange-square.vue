@@ -1,12 +1,12 @@
 <template>
-	<div class="exchange-square" @click="choose">
+	<div class="exchange-square">
 		<div v-show="item.choose" class="choose-icon">
 		</div>
 		<div class="title">
 			{{item.name?item.name:'暂无'}}
 		</div>
 		<div class="topic one-line">
-			<span class="num">{{item.price}}</span>
+			<span class="num">消耗积分：{{item.price}}积分</span>
 			<!-- <span class="unit">元</span> -->
 		</div>
 	</div>
@@ -75,13 +75,13 @@
 			width: 100%;
 			font-size: $square-title;
 			color: $color-text;
-			height: 0.24rem;
+			height: auto;
 			line-height: 0.24rem;
-			text-align: center;
+			text-align: left;
 		}
 		.topic {
 			width: 100%;
-			text-align: center;
+			text-align: left;
 			font-size: $square-title;
 			color: $color-orange;
 			height: 0.24rem;

@@ -1,9 +1,9 @@
 <template>
-	<div class="package-list-choose">
+	<div class="card-list">
 		<div class="title">
-			选择卡
+			我拥有的卡
 		</div>
-		<table class="card-list-con" v-show="list.length !== 0">
+		<table class="card-list-con">
 			<tr>
 				<td>卡ID</td>
 				<td>卡昵称</td>
@@ -16,39 +16,39 @@
 				<td>
 					{{item.nick_name?item.nick_name:'暂无'}}
 				</td>
-				<td class="check" @click="checkCard(item.id)">
-					查看此卡
+				<td class="check" @click="edit(item)">
+					修改卡昵称
 				</td>
 			</tr>
 		</table>
-		<div class="no-data" v-show="list.length === 0">
-			暂无信息
-		</div>
 	</div>
 </template>
-
 <script>
-	import apis from '../../apis';
+	import { Indicator, MessageBox, Toast } from 'mint-ui';
+	import apis from '../../apis/index.js';
 	import axios from 'axios';
-	import { Navbar, TabItem, TabContainer, TabContainerItem, Indicator, Button } from 'mint-ui';
 	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
-		name: 'package-list-choose',
+		name: 'card-list',
 		data () {
 			return {
 				token: '',
-				list: []
+				list: {
+					data: [],
+					meta: {
+						pagination: {
+							total_pages: null
+						}
+					}
+				},
+				page: 1
 			};
 		},
 		created () {
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
-			// 获取卡列表
 			this.fetchData();
-		},
-		beforeDestroy () {
-			Indicator.close();
 		},
 		methods: {
 			fetchData () {
@@ -65,30 +65,41 @@
 					apis.errors.errorPublic(error.response, this);
 				});
 			},
-			checkCard (id) {
-				this.$router.push({name: 'PackageList', params: {id: id}});
+			edit (item) {
+				MessageBox.prompt('请输入卡昵称').then(({ value, action }) => {
+					if (action === 'confirm') {
+						axios.post(apis.urls.editCardNick + '/' + item.id + '/nick_name', {nick_name: value})
+						.then((response) => {
+							item.nick_name = value;
+							Toast({
+								message: '修改成功！',
+								iconClass: 'mintui mintui-success'
+							});
+						})
+						.catch((error) => {
+							apis.errors.errorPublic(error.response, this);
+						});
+					}
+				});
 			}
 		},
 		components: {
-			[Navbar.name]: Navbar,
-			[TabItem.name]: TabItem,
-			[TabContainer.name]: TabContainer,
-			[TabContainerItem.name]: TabContainerItem,
 			[Indicator.name]: Indicator,
-			[Button.name]: Button
+			[MessageBox.name]: MessageBox,
+			[Toast.name]: Toast
 		}
 	};
 </script>
 <style lang="scss">
 	@import '../../assets/sass/partials/_var.scss';
 	@import '../../assets/sass/partials/_border.scss';
-	
-	.package-list-choose .package-list-btn .mint-button {
+
+	.card-list .package-list-btn .mint-button {
 		border-radius: 0.2rem;
 		width: 80%;
 		margin: 0.3rem auto;
 	}
-	.package-list-choose {
+	.card-list {
 		.title {
 			width: 100%;
 			font-size: 0.16rem;

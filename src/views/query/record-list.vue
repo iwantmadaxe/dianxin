@@ -70,10 +70,12 @@
 			font-size: $page-title;
 			color: $color-gray-dx;
 		}
+		padding-bottom: 0.1rem;
 	}
 	.list-null {
 		margin-top: 0.1rem;
 		height: 0.24rem;
 		line-height: 0.24rem;
+		font-size: $square-title;
 	}
 </style>

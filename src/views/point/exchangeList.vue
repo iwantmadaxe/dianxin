@@ -1,5 +1,5 @@
 <template>
-	<div class="point-list">
+	<div class="point-exchange-list">
 		<ul
 			v-show="list.data.length !== 0"
 			v-infinite-scroll="loadMore"
@@ -30,7 +30,7 @@
 	import { readLocal } from '../../utils/localstorage.js';
 
 	export default {
-		name: 'point-list',
+		name: 'point-exchange-list',
 		data () {
 			return {
 				token: '',
@@ -98,7 +98,7 @@
 	@import '../../assets/sass/partials/_var.scss';
 	@import '../../assets/sass/partials/_border.scss';
 
-	.point-list {
+	.point-exchange-list {
 		background: #fff;
 		.list-row {
 			padding: 0.12rem 5.55% 0.12rem 0;

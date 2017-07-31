@@ -3,24 +3,27 @@
 		<div class="title">
 			选择卡
 		</div>
-		<table class="card-list">
+		<table class="card-list-con"  v-show="list.length !== 0">
 			<tr>
 				<td>卡ID</td>
-				<td>卡号</td>
+				<td>卡昵称</td>
 				<td>操作</td>
 			</tr>
 			<tr v-for="(item, index) in list">
 				<td>
-					{{index + 1}}
+					{{item.id}}
 				</td>
 				<td>
-					{{item.code}}
+					{{item.nick_name?item.nick_name:'暂无'}}
 				</td>
 				<td class="check" @click="checkCard(item.id)">
 					查看此卡
 				</td>
 			</tr>
 		</table>
+		<div class="no-data" v-show="list.length === 0">
+			暂无信息
+		</div>
 	</div>
 </template>
 
@@ -97,15 +100,20 @@
 			padding: 0 10px;
 		}
 	}
-	.card-list {
+	.card-list-con {
 		width: 100%;
 		background: $color-white;
+		border-top: 1px solid $color-gray;
 		tr {
 			height: 0.32rem;
 			line-height: 0.32rem;
+			border-bottom: 1px solid $color-gray;
 			.check {
 				color: $color-blue;
 			}
 		}
+	}
+	.no-data {
+		font-size: $square-title;
 	}
 </style>

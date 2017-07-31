@@ -1,7 +1,7 @@
 <template>
 	<div class="mine-qrcode input-field-con">
-		<p class="mine-qrcode-p">我的二维码：</p>
-		<img class="mine-qrcode-img" v-bind:src="user.qrcode" v-show="user.qrcode">
+		<p class="mine-qrcode-p">推荐二维码：</p>
+		<img class="mine-qrcode-img" v-bind:src="user.url" v-show="user.url">
 	</div>
 </template>
 <script>
@@ -17,7 +17,7 @@
 				token: '',
 				user: {
 					points: null,
-					qrcode: ''
+					url: ''
 				},
 				valid: {
 					msg: '',
@@ -29,8 +29,8 @@
 			Indicator.open('加载中...');
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
-			this.user.qrcode = this.$route.query.img;
-			if (!this.user.qrcode) {
+			this.user.url = this.$route.query.img;
+			if (!this.user.url) {
 				this.getQrcode();
 			} else {
 				this.$nextTick(function () {
@@ -43,7 +43,7 @@
 				let url = window.location.href;
 				axios.get(apis.urls.getQrcode, {params: {url: url}})
 				.then((response) => {
-					this.user.qrcode = response.data.data;
+					this.user = response.data.data;
 					Indicator.close();
 				})
 				.catch((error) => {

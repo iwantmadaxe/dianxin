@@ -13,10 +13,17 @@
 			</div>
 		</div>
 		<div class="list-con">
-			<div class="mine-list-row" @click="goEditPhone">
+			<div class="mine-list-row" @click="goEditPhone" v-show="hasPhone">
 				<img class="left-icon" src="../../assets/images/login/phone.png">
 				<div class="list-row-context">
 					<span class="title">修改手机号</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
+			<div class="mine-list-row" @click="goBindingPhone" v-show="!hasPhone">
+				<img class="left-icon" src="../../assets/images/login/phone.png">
+				<div class="list-row-context">
+					<span class="title">绑定手机号</span>
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
@@ -24,6 +31,13 @@
 				<img class="left-icon" src="../../assets/images/login/msg.png">
 				<div class="list-row-context">
 					<span class="title">消息中心</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
+			<div class="mine-list-row" @click="goCardList">
+				<i class="fa fa-credit-card left-icon-fa" style="margin: 0.15rem 0.08rem 0 0.08rem;"></i>
+				<div class="list-row-context">
+					<span class="title">我拥有的卡</span>
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
@@ -51,7 +65,14 @@
 			<div class="mine-list-row" @click="goMineQrcode">
 				<i class="fa fa-qrcode left-icon-fa"></i>
 				<div class="list-row-context">
-					<span class="title">我的二维码</span>
+					<span class="title">推荐二维码</span>
+					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
+				</div>
+			</div>
+			<div class="mine-list-row" @click="goMinePointCenter">
+				<i class="fa fa-star left-icon-fa"></i>
+				<div class="list-row-context">
+					<span class="title">我的积分管理</span>
 					<img class="right-icon" src="../../assets/images/main/right-arrow.png">
 				</div>
 			</div>
@@ -87,7 +108,8 @@
 				mine: {
 					area: {},
 					name: ''
-				}
+				},
+				hasPhone: false
 			};
 		},
 		created () {
@@ -97,6 +119,11 @@
 			axios.get(apis.urls.userProfile)
 			.then((response) => {
 				this.mine = response.data.data;
+				if (response.data.data.phone) {
+					this.hasPhone = true;
+				} else {
+					this.hasPhone = false;
+				}
 				saveLocal('mine', this.mine);
 				Indicator.close();
 			})
@@ -112,6 +139,9 @@
 			goEditPhone () {
 				this.$router.push({name: 'EditPhone'});
 			},
+			goBindingPhone () {
+				this.$router.push({name: 'BindPhone'});
+			},
 			goMineInfoEdit () {
 				this.$router.push({name: 'MineInfoEdit'});
 			},
@@ -124,11 +154,17 @@
 			goMsgCenter () {
 				this.$router.push({name: 'MsgCenter'});
 			},
+			goCardList () {
+				this.$router.push({name: 'CardList'});
+			},
 			goPoint () {
 				this.$router.push({name: 'MyPoint'});
 			},
 			goAddressList () {
 				this.$router.push({name: 'AddressList'});
+			},
+			goMinePointCenter () {
+				this.$router.push({name: 'PointCenter'});
 			},
 			logout () {
 				axios.get(apis.urls.logout)
@@ -185,7 +221,7 @@
 					-ms-flex: 1;
 					flex: 1;
 					.topic-text {
-						font-size: $page-title;
+						font-size: $square-title;
 						color: $color-text;
 						text-align: left;
 						padding-left: 0.15rem;
@@ -216,7 +252,7 @@
 		.logout-row {
 			height: 0.45rem;
 			line-height: 0.45rem;
-			font-size: $page-title;
+			font-size: $square-title;
 			color: $color-blue;
 			margin-top: 0.2rem;
 			background: $color-white;
@@ -254,7 +290,7 @@
 					text-align: left;
 					position: relative;
 					.title{
-						font-size: $page-title;
+						font-size: $square-title;
 						color: $color-text;
 					}
 					.right-icon {

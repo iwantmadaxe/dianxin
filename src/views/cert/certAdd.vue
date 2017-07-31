@@ -172,6 +172,7 @@
 				if (_this.isCert) {
 					return false;
 				}
+				Indicator.open('认证中');
 				_this.isCert = true;
 				let postTpl = new FormData();
 				postTpl.append('name', this.cert.name);
@@ -182,6 +183,7 @@
 				postTpl.append('back_image', this.imgBack);
 				axios.post(apis.urls.certPost, postTpl)
 				.then((response) => {
+					Indicator.close();
 					Toast({
 						message: '已提交！',
 						iconClass: 'mintui mintui-success'
@@ -189,6 +191,7 @@
 					this.$router.push({name: 'CertList'});
 				})
 				.catch((error) => {
+					Indicator.close();
 					this.isCert = false;
 					apis.errors.errorPublic(error.response, this);
 				});

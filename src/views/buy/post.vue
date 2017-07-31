@@ -43,6 +43,8 @@
 	import axios from 'axios';
 	import { readLocal } from '../../utils/localstorage.js';
 	import KNumber from '../../components/number/number.vue';
+	import wx from 'weixin-js-sdk';
+	import { getCookie } from '../../utils/cookie.js';
 
 	export default {
 		name: 'buy-post',
@@ -60,7 +62,10 @@
 					id: '',
 					price: ''
 				},
-				addressList: []
+				addressList: [],
+				isWx: '',
+				openid: '',
+				jsSdkConfig: {}
 			};
 		},
 		created () {
@@ -69,6 +74,12 @@
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
 			this.data.recommendId = this.$route.query.recommend;
+			if (this.isWeixin()) {
+				this.isWx = true;
+			}
+			this.openid = getCookie('openid');
+			// setCookie('openid', 'odRcE1BAeR2rXLU7R6uyj2awMh4o');
+			// setCookie('wechat', 2);
 			if (this.$route.query.num) {
 				this.data.num = parseInt(this.$route.query.num);
 			}
@@ -91,26 +102,46 @@
 				});
 				this.getAddressList();
 			}
-			axios.get(apis.urls.userProfile)
-			.then((response) => {
-				Indicator.close();
-			})
-			.catch((error) => {
-				Indicator.close();
-				apis.errors.errorPublic(error.response, this);
-				return false;
-			});
 			axios.get(apis.urls.getPackageDetail)
 			.then((response) => {
+				Indicator.close();
 				this.card.price = response.data.data.price;
 				this.card.id = response.data.data.id;
 			})
 			.catch((error) => {
+				Indicator.close();
 				apis.errors.errorPublic(error.response, this);
 				return false;
 			});
 		},
 		methods: {
+			isWeixin () {
+				let ua = navigator.userAgent.toLowerCase();
+				try {
+					if (ua.match(/MicroMessenger/i)[0] === 'micromessenger') {
+						return true;
+					} else {
+						return false;
+					}
+				} catch (err) {
+					return false;
+				}
+			},
+			wxinit (config) {
+				wx.config(config);
+			},
+			pay () {
+				wx.chooseWXPay({
+					timestamp: this.jsSdkConfig.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+					nonceStr: this.jsSdkConfig.nonceStr, // 支付签名随机串，不长于 32 位
+					package: this.jsSdkConfig.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+					signType: this.jsSdkConfig.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+					paySign: this.jsSdkConfig.paySign, // 支付签名
+					success: function (res) {
+						this.$message('支付成功！');
+					}
+				});
+			},
 			getAddressList (id) {
 				let _this = this;
 				axios.get(apis.urls.getAddressList)
@@ -155,10 +186,11 @@
 				};
 				axios.post(apis.urls.buyCard + '/' + this.card.id, tpl)
 				.then((response) => {
-					this.addressList = response.data.data.map(function (item) {
-						item.label = item.area[0].name + ' ' + item.area[1].name + ' ' + item.area[2].name + ' ' + item.address;
-						return item;
-					});
+					if (this.isWx) {
+						this.jsSdkConfig = response.data;
+						this.wxinit(this.jsSdkConfig);
+						this.pay();
+					}
 				})
 				.catch((error) => {
 					apis.errors.errorPublic(error.response, this);

@@ -73,7 +73,8 @@
 		},
 		methods: {
 			goBuyFlow () {
-				this.$router.push({name: 'BuyFlow'});
+				// this.$router.push({name: 'BuyFlow'});
+				this.$router.push({name: 'PackageList', params: {id: this.id}});
 			}
 		},
 		components: {

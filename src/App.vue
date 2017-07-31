@@ -6,6 +6,7 @@
 
 <script>
 import { getCookie } from './utils/cookie.js';
+import { saveLocal } from './utils/localstorage.js';
 
 export default {
 	computed: {
@@ -14,8 +15,10 @@ export default {
 		}
 	},
 	created () {
-		let id = getCookie('openid');
-		console.log(id);
+		let token = getCookie('token');
+		if (token) {
+			saveLocal('user', 'bearer ' + token);
+		}
 	}
 };
 </script>

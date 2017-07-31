@@ -3,10 +3,7 @@
 		<div class="point-context">
 			<img class="banner" src="../../assets/images/point/banner.png">
 			<p class="title-p">流量兑换包</p>
-			<div class="exchange-con">
-				<exchange-square v-for="item in list" :item="item" :list="list"></exchange-square>
-			</div>
-			<p class="point-now">当前可用积分：<span class="point-num">500分</span></p>
+			<p class="point-now">当前可用积分：<span class="point-num">{{points}}分</span></p>
 		</div>
 		<div class="exchange-btn">
 			<mt-button size="large" type="primary" @click="postOrder">确定兑换</mt-button>
@@ -18,7 +15,7 @@
 	import apis from '../../apis';
 	import axios from 'axios';
 	import { Navbar, TabItem, TabContainer, TabContainerItem, Indicator, Button, MessageBox } from 'mint-ui';
-	import { readLocal } from '../../utils/localstorage.js';
+	import { readLocal, saveLocal } from '../../utils/localstorage.js';
 	import ExchangeSquare from '../../views/package/exchange-square.vue';
 
 	export default {
@@ -26,19 +23,9 @@
 		data () {
 			return {
 				token: '',
-				list: [
-					{
-						name: '1G 当月流量',
-						price: '240分',
-						choose: false
-					},
-					{
-						name: '3G 当月流量',
-						price: '480分',
-						choose: false
-					}
-				],
-				cardNo: ''
+				list: [],
+				cardNo: '',
+				points: null
 			};
 		},
 		computed: {
@@ -56,27 +43,31 @@
 		created () {
 			this.token = 'bearer ' + readLocal('user').token;
 			axios.defaults.headers.common['Authorization'] = this.token;
-			document.body.style.backgroundColor = '#ffffff';
-			// 获取套餐列表
-			// this.fetchData();
+			this.$nextTick(function () {
+				this.getPoint();
+			});
+			this.fetchData();
 		},
 		beforeDestroy () {
 			Indicator.close();
 		},
 		methods: {
+			getPoint () {
+				let points = readLocal('mine').points;
+				if (points) {
+					this.points = points;
+				} else {
+					axios.get(apis.urls.userProfile)
+					.then((response) => {
+						this.points = response.data.data.points;
+						saveLocal('mine', response.data.data);
+					})
+					.catch((error) => {
+						apis.errors.errorPublic(error.response, this);
+					});
+				}
+			},
 			fetchData () {
-				// 获取套餐列表
-				Indicator.open('加载中...');
-				this.loading = true;
-				axios.get(apis.urls.flow)
-				.then((response) => {
-					Indicator.close();
-					this.list = apis.pures.purePackageList(response.data.data);
-				})
-				.catch((error) => {
-					Indicator.close();
-					apis.errors.errorPublic(error.response, this);
-				});
 			},
 			postOrder () {
 				if (!this.packageId) {
@@ -96,9 +87,6 @@
 				});
 			}
 		},
-		directives: {
-			// InfiniteScroll
-		},
 		components: {
 			[Navbar.name]: Navbar,
 			[TabItem.name]: TabItem,
@@ -117,7 +105,7 @@
 
 	.point-exchange {
 		.point-context {
-			padding: 0.2rem 0 1.6rem;
+			padding: 0 0 1.6rem;
 			background-image: url('../../assets/images/flow/bg.png');
 			background-size: 90% auto;
 			background-repeat: no-repeat;
@@ -152,7 +140,7 @@
 			    display: flex;
 			    justify-content: space-between;
 				.exchange-square {
-					width: 45%;
+					width: 100%;
 				}
 			}
 		}

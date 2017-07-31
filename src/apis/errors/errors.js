@@ -14,7 +14,8 @@ const errors = function (error, _this) {
 			// 返回登录页面
 			try {
 				localLogout();
-				_this.$router.push({name: 'Login'});
+				let redict = window.location.href;
+				_this.$router.push({name: 'Login', query: {redict: redict}});
 			} catch (e) {}
 		});
 		return false;
